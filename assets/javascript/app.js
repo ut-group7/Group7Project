@@ -46,9 +46,9 @@ $(document).on("click", ".select", function(){
             </th>
             <th>
             $: <input type="radio" name="price" class="myCheck"  value="1">
-            $$: <input type="radio" name="price" class="myCheck"  value="2">
-            $$$: <input type="radio" name="price" class="myCheck"  value="3">
-            $$$$: <input type="radio" name="price" class="myCheck"  value="4">
+            $$: <input type="radio" name="price2" class="myCheck"  value="2">
+            $$$: <input type="radio" name="price3" class="myCheck"  value="3">
+            $$$$: <input type="radio" name="price4" class="myCheck"  value="4">
             </th>
             <br>
             <th>
@@ -75,8 +75,41 @@ $(document).on("click", "#new-params", function(){
     var food = $("#food-input").val();
     var city = localStorage.getItem('city');
     var dollars = $("input[name='price']:checked").val();
+    var dollars2 = $("input[name='price2']:checked").val();
+    var dollars3 = $("input[name='price3']:checked").val();
+    var dollars4 = $("input[name='price4']:checked").val();
+    var dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
+    console.log(dollars, dollars2, dollars3, dollars4);
+
+    function isChecked (dollars, dollars2, dollars3, dollars4) {
+    var dollarSign = "";
+if(dollars !== undefined){
+  dollarSign = dollars;
+}
+if(dollars2 !== undefined){
+  if(dollarSign === ""){
+    dollarSign = dollars2;
+  }else{
+    dollarSign = dollarSign + "," + dollars2;
+  }
+}
+if(dollars3 !== undefined){
+  if(dollarSign === ""){
+    dollarSign = dollars3;
+  }else{
+    dollarSign = dollarSign + "," + dollars3;
+  }
+}
+if(dollars4 !== undefined){
+  if(dollarSign === ""){
+    dollarSign = dollars4;
+  }else{
+    dollarSign = dollarSign + "," + dollars4;
+  }
+} return dollarSign;
+    }
     
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollars}&limit=10&sortby=rating`;
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=20&`;
 
     $.ajax({
        url: newURL,
