@@ -45,10 +45,10 @@ $(document).on("click", ".select", function(){
                 </div>
             </th>
             <th>
-            $: <input type="checkbox" class="myCheck">
-            $$: <input type="checkbox" class="myCheck">
-            $$$: <input type="checkbox" class="myCheck">
-            $$$$: <input type="checkbox" class="myCheck">
+            $: <input type="radio" name="price" class="myCheck"  value="1">
+            $$: <input type="radio" name="price" class="myCheck"  value="2">
+            $$$: <input type="radio" name="price" class="myCheck"  value="3">
+            $$$$: <input type="radio" name="price" class="myCheck"  value="4">
             </th>
             <br>
             <th>
@@ -74,8 +74,9 @@ $(document).on("click", "#new-params", function(){
 
     var food = $("#food-input").val();
     var city = localStorage.getItem('city');
-   
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}`;
+    var dollars = $("input[name='price']:checked").val();
+    
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollars}&limit=10&sortby=rating`;
 
     $.ajax({
        url: newURL,
