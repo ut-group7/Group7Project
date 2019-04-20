@@ -1,0 +1,26 @@
+body {
+    background-image: url('../images/city.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#header {
+    margin-top: 100px;
+    background-color: rgba(66, 66, 66, .7);
+    text-align: center;
+    color: darkblue;
+    text-shadow: 2px 2px lightslategray;
+}
+
+h1 {
+    font-size: 65px;
+    font-weight: bolder; 
+}
+
+h5{
+    display: inline-block;
+}
+img{
+    width: 205px;
+    height: 115px;
+}
