@@ -27,6 +27,7 @@ $.ajax({
       console.log(response);
     $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
     <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
+    $("#options").html(``);
     $("#options").append(response._embedded.events.map(show));
     $("#next").html(makePages(response.page.totalPages));
     count = 0;
@@ -41,23 +42,6 @@ function makePages(p){
   return pages.join();
 }
 
-$(document).on("click", ".page", function(){
-page = $(this).attr("data-page");
-console.log(this);
-$("#options").html("");
-var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
-console.log(queryURL);
-$.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-      console.log(response);
-    $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
-    <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").append(response._embedded.events.map(show));
-    count = 0;
-  });
-});
 
 $(document).on("click", ".select", function(){
     localStorage.setItem('event', $(this).attr("event"));
@@ -66,6 +50,7 @@ $(document).on("click", ".select", function(){
     localStorage.setItem('address', $(this).attr("address"));
     $("#options").html(``);
     $("#instructions").html(``);
+    $("#next").html(``);
     $("#find").html(`
     <th>
                 <div class="form-group">
@@ -158,6 +143,7 @@ if(dollars4 !== undefined){
           console.log(data);
           $("#instructions").html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
+          $("#choices").html(``);
           $("#choices").append(data.businesses.map(display));
        }
     });
