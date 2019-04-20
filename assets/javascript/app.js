@@ -1,3 +1,43 @@
+
+  var config = {
+    apiKey: "AIzaSyDDxX6GASYnkjZK_ETcT02vI2HL4IaVYmo",
+    authDomain: "group7-e91b6.firebaseapp.com",
+    databaseURL: "https://group7-e91b6.firebaseio.com",
+    projectId: "group7-e91b6",
+    storageBucket: "group7-e91b6.appspot.com",
+    messagingSenderId: "427946972311"
+  };
+  firebase.initializeApp(config);
+
+
+var database = firebase.database();
+
+firebase.auth().signInAnonymously().catch(function(error) {
+  
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  console.log(errorCode, errorMessage);
+
+});
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    var isAnonymous = user.isAnonymous;
+    var uid = user.uid;
+    console.log(isAnonymous, uid);
+    // ...
+  } else {
+    // User is signed out.
+    console.log("user is signed out")
+    // ...
+  }
+  // ...
+});
+
+
+
+
 var date = moment().format("YYYY-MM-DD");
 var end = moment().add(14, 'days').format("YYYY-MM-DD");
 console.log(end);
