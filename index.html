@@ -16,13 +16,14 @@
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css">
 
 </head>
-<container>
+<div class="container-fluid">
 
     <body>
         <div class="jumbotron" id="header">
             <h1 class="display-12">Date Night Planner</h1>
         </div>
         <div class="row"></div>
+        <div class="row" id="form-row">
         <form id="find">
             <th>
                 <div class="form-group">
@@ -98,10 +99,11 @@
                   <input class="form-control" id="search-input" type="text">
               </div>
           </th>
-            <th>
-                <button type="button" class="btn btn-dark" id="add-params">Submit</button>
-            </th>
         </form>
+        
+    </div>
+    <div class="row" id="home-Submit">
+        <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
     </div>
         <div id="instructions"></div>
         <span id="options"></span>
