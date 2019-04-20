@@ -129,12 +129,11 @@ if(dollars4 !== undefined){
 } return dollarSign;
     }
     
+
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=10&open_at=${isOpen}`;
+
  var eventTime = localStorage.getItem('time');
     var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
-   
-
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=20&`;
-
 
     $.ajax({
        url: newURL,
