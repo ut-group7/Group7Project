@@ -4,6 +4,7 @@ console.log(end);
 var count = 0;
 var page = 0;
 var miles;
+var address;
 
 
 
@@ -26,6 +27,7 @@ $.ajax({
       console.log(response);
     $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
     <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
+    $("#options").html(``);
     $("#options").append(response._embedded.events.map(show));
     $("#next").html(makePages(response.page.totalPages));
     count = 0;
@@ -40,31 +42,17 @@ function makePages(p){
   return pages.join();
 }
 
-$(document).on("click", ".page", function(){
-page = $(this).attr("data-page");
-console.log(this);
-$("#options").html("");
-var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
-console.log(queryURL);
-$.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-      console.log(response);
-    $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
-    <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").append(response._embedded.events.map(show));
-    count = 0;
-  });
-});
 
 $(document).on("click", ".select", function(){
     localStorage.setItem('event', $(this).attr("event"));
     localStorage.setItem('time', $(this).attr("time"));
     localStorage.setItem('date', $(this).attr("date"));
-    localStorage.setItem('link', $(this).attr("link"));
+    localStorage.setItem('link', $(this).attr("link"));    
+    localStorage.setItem('address', $(this).attr("address"));
+
     $("#options").html(``);
     $("#instructions").html(``);
+    $("#next").html(``);
     $("#find").html(`
     <th>
                 <div class="form-group">
@@ -83,15 +71,19 @@ $(document).on("click", ".select", function(){
                 <button type="button" class="btn btn-dark" id="new-params">Submit</button>
             </th>
     `)
-    
+    $("#next").html("");
 });
 
 
 function show(r){
     var i = count;
+    address = (r._embedded.venues[0].address.line1 + ", " + r._embedded.venues[0].city.name + ", " + r._embedded.venues[0].state.name);
     var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
     count ++;
-    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}" link="${r.url}">select</button>
+
+    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}" link="${r.url}" address="${address}">select</button>
+
+
     <h5>${r.name}</h5><p>Date/Time: ${r.dates.start.localDate} ${time}</p>
     <a href="${r.url}" target="_blank">Link to Details</a>
     <img src="${r.images[0].url}"/></br>
@@ -102,6 +94,7 @@ $(document).on("click", "#new-params", function(){
 
     var food = $("#food-input").val();
     var city = localStorage.getItem('city');
+
     var dollars = $("input[name='price']:checked").val();
     var dollars2 = $("input[name='price2']:checked").val();
     var dollars3 = $("input[name='price3']:checked").val();
@@ -136,7 +129,12 @@ if(dollars4 !== undefined){
 } return dollarSign;
     }
     
+ var eventTime = localStorage.getItem('time');
+    var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
+   
+
     var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=20&`;
+
 
     $.ajax({
        url: newURL,
@@ -149,6 +147,7 @@ if(dollars4 !== undefined){
           console.log(data);
           $("#instructions").html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
+          $("#choices").html(``);
           $("#choices").append(data.businesses.map(display));
        }
     });
@@ -177,3 +176,4 @@ $(document).on("click", ".newSelect", function(){
     <a href="${localStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
     `);
 });
+
