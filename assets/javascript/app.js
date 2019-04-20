@@ -9,6 +9,7 @@ var address;
 
 
 
+
 $("#add-params").on("click", function(){
 
 
@@ -16,9 +17,15 @@ city = $("#city-input").val();
 localStorage.setItem('city', city);
 miles = $("#miles-input").val();
 state = $("#select-state option:selected").attr("value");
+var category = "";
+category = $("#search-input").val();
+var keyword =  "";
+if(category !== ""){
+  keyword = `&keyword=${category}`
+}
 localStorage.setItem('state', state);
 console.log(state);
-var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
+var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}${keyword}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
 console.log(queryURL);
 $.ajax({
     url: queryURL,
