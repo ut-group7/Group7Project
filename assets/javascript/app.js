@@ -63,7 +63,6 @@ $(document).on("click", ".select", function(){
     localStorage.setItem('time', $(this).attr("time"));
     localStorage.setItem('date', $(this).attr("date"));
     localStorage.setItem('link', $(this).attr("link"));
-    $("#next").html(``);
     $("#options").html(``);
     $("#instructions").html(``);
     $("#find").html(`
