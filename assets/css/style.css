@@ -2,6 +2,8 @@ body {
     background-image: url('../images/city.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    margin: 0;
+    padding: 0;
 }
 
 #header {
@@ -26,18 +28,46 @@ img {
     height: 115px;
 }
 
+#form-row {
+    justify-content: center;
+    align-content: center;
+}
+
 #find {
     display: inline-flex;
 }
 
-#form-group {
+.form-group {
     display: inline-flex;
 }
 
-body {
-    margin: 0;
-    padding: 0;
+#city-input, #miles-input, #search-input {
+    height: 50px;
+    margin-right: 10px;
 }
+
+label {
+    background-color: darkblue;
+    color: white;
+    font-size: 15px;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#home-Submit {
+    margin-top: 40px;
+    justify-content: center;
+}
+
+#select-state {
+    height: 50px;
+    margin-right: 10px;
+}
+
+
+/* ------------MAP CSS-------*/
 
 #map {
     position: absolute;
@@ -52,3 +82,7 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+
+
+
