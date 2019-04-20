@@ -9,6 +9,7 @@ var address;
 
 
 
+
 $("#add-params").on("click", function(){
 
 
@@ -16,9 +17,15 @@ city = $("#city-input").val();
 localStorage.setItem('city', city);
 miles = $("#miles-input").val();
 state = $("#select-state option:selected").attr("value");
+var category = "";
+category = $("#search-input").val();
+var keyword =  "";
+if(category !== ""){
+  keyword = `&keyword=${category}`
+}
 localStorage.setItem('state', state);
 console.log(state);
-var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
+var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}${keyword}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
 console.log(queryURL);
 $.ajax({
     url: queryURL,
@@ -47,6 +54,7 @@ $(document).on("click", ".select", function(){
     localStorage.setItem('event', $(this).attr("event"));
     localStorage.setItem('time', $(this).attr("time"));
     localStorage.setItem('date', $(this).attr("date"));
+    localStorage.setItem('link', $(this).attr("link")); 
     localStorage.setItem('address', $(this).attr("address"));
     $("#options").html(``);
     $("#instructions").html(``);
@@ -59,11 +67,11 @@ $(document).on("click", ".select", function(){
                 </div>
             </th>
             <th>
-            $: <input type="radio" name="price" class="myCheck"  value="1">
-            $$: <input type="radio" name="price2" class="myCheck"  value="2">
-            $$$: <input type="radio" name="price3" class="myCheck"  value="3">
-            $$$$: <input type="radio" name="price4" class="myCheck"  value="4">
-            </th>
+            $: <input type="checkbox" name="price" class="myCheck"  value="1">
+            $$: <input type="checkbox" name="price2" class="myCheck"  value="2">
+            $$$: <input type="checkbox" name="price3" class="myCheck"  value="3">
+            $$$$: <input type="checkbox" name="price4" class="myCheck"  value="4">
+           </th>
             <br>
             <th>
                 <button type="button" class="btn btn-dark" id="new-params">Submit</button>
@@ -78,9 +86,9 @@ function show(r){
     address = (r._embedded.venues[0].address.line1 + ", " + r._embedded.venues[0].city.name + ", " + r._embedded.venues[0].state.name);
     var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
     count ++;
-    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}" address="${address}">select</button>
+    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}" link="${r.url}" address="${address}">select</button>
     <h5>${r.name}</h5><p>Date/Time: ${r.dates.start.localDate} ${time}</p>
-    <a href="${r.url}">Link to Details</a>
+    <a href="${r.url}" target="_blank">Link to Details</a>
     <img src="${r.images[0].url}"/></br>
     <hr>`
 }
@@ -95,7 +103,6 @@ $(document).on("click", "#new-params", function(){
     var dollars3 = $("input[name='price3']:checked").val();
     var dollars4 = $("input[name='price4']:checked").val();
     var dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
-    console.log(dollars, dollars2, dollars3, dollars4);
 
     function isChecked (dollars, dollars2, dollars3, dollars4) {
     var dollarSign = "";
@@ -129,7 +136,7 @@ if(dollars4 !== undefined){
     var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
    
 
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&limit=10&open_at=${isOpen}`;
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=10&open_at=${isOpen}`;
 
 
     $.ajax({
@@ -155,7 +162,7 @@ function display(r){
     count ++;
     return `</br><button class="newSelect" value="${i}" name="${r.name}">select</button>
     <h5>${r.name}</h5><p>Price: ${r.price} Phone Number: ${r.display_phone} Address: ${r.location.display_address[0]}, ${r.location.display_address[1]}</p>
-    <a href="${r.url}">Link to Details on Yelp</a>
+    <a href="${r.url}" target="_blank">Link to Details on Yelp</a>
     <img src="${r.image_url}"/></br>
     <hr>`
 }
@@ -167,8 +174,9 @@ $(document).on("click", ".newSelect", function(){
     $("#find").html(``);
     $("#choices").html(``);
     $("#results").html(`
-    <h1>You are going to eat at ${$(this).attr("name")}.<h1>
-    <h1>And then going to ${localStorage.getItem('event')} at ${localStorage.getItem('time')} on ${localStorage.getItem('date')}
+    <h1>You are going to eat at ${$(this).attr("name")}.</h1>
+    <h1>And then going to ${localStorage.getItem('event')} at ${localStorage.getItem('time')} on ${localStorage.getItem('date')}</h1>
+    <a href="${localStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
     `);
 });
 
