@@ -4,6 +4,7 @@ console.log(end);
 var count = 0;
 var page = 0;
 var miles;
+var address;
 
 
 
@@ -62,6 +63,7 @@ $(document).on("click", ".select", function(){
     localStorage.setItem('event', $(this).attr("event"));
     localStorage.setItem('time', $(this).attr("time"));
     localStorage.setItem('date', $(this).attr("date"));
+    localStorage.setItem('address', $(this).attr("address"));
     $("#options").html(``);
     $("#instructions").html(``);
     $("#find").html(`
@@ -82,15 +84,16 @@ $(document).on("click", ".select", function(){
                 <button type="button" class="btn btn-dark" id="new-params">Submit</button>
             </th>
     `)
-    
+    $("#next").html("");
 });
 
 
 function show(r){
     var i = count;
+    address = (r._embedded.venues[0].address.line1 + ", " + r._embedded.venues[0].city.name + ", " + r._embedded.venues[0].state.name);
     var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
     count ++;
-    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}">select</button>
+    return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start.localDate}" address="${address}">select</button>
     <h5>${r.name}</h5><p>Date/Time: ${r.dates.start.localDate} ${time}</p>
     <a href="${r.url}">Link to Details</a>
     <img src="${r.images[0].url}"/></br>
@@ -140,7 +143,8 @@ if(dollars4 !== undefined){
  var eventTime = localStorage.getItem('time');
     var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
    
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&open_at=${isOpen}`;
+
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&limit=10&open_at=${isOpen}`;
 
 
     $.ajax({
@@ -181,3 +185,4 @@ $(document).on("click", ".newSelect", function(){
     <h1>And then going to ${localStorage.getItem('event')} at ${localStorage.getItem('time')} on ${localStorage.getItem('date')}
     `);
 });
+
