@@ -101,6 +101,7 @@ $(document).on("click", "#new-params", function(){
 
     var food = $("#food-input").val();
     var city = localStorage.getItem('city');
+
     var dollars = $("input[name='price']:checked").val();
     var dollars2 = $("input[name='price2']:checked").val();
     var dollars3 = $("input[name='price3']:checked").val();
@@ -136,7 +137,11 @@ if(dollars4 !== undefined){
 } return dollarSign;
     }
     
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=20&`;
+ var eventTime = localStorage.getItem('time');
+    var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
+   
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&open_at=${isOpen}`;
+
 
     $.ajax({
        url: newURL,
