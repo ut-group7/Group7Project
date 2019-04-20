@@ -47,8 +47,7 @@ $(document).on("click", ".select", function(){
     localStorage.setItem('event', $(this).attr("event"));
     localStorage.setItem('time', $(this).attr("time"));
     localStorage.setItem('date', $(this).attr("date"));
-    localStorage.setItem('link', $(this).attr("link"));
-    $("#next").html(``);
+    localStorage.setItem('link', $(this).attr("link"));    
     localStorage.setItem('address', $(this).attr("address"));
 
     $("#options").html(``);
@@ -134,7 +133,7 @@ if(dollars4 !== undefined){
     var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
    
 
-    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&limit=10&open_at=${isOpen}`;
+    var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=20&`;
 
 
     $.ajax({
