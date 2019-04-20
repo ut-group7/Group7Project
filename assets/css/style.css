@@ -24,3 +24,12 @@ img{
     width: 205px;
     height: 115px;
 }
+
+#find {
+    display: inline-flex;
+}
+
+#form-group {
+    display: inline-flex;
+}
+
