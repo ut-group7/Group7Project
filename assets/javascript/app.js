@@ -40,9 +40,10 @@ $('#add-params').on('click', function() {
 function makePages(p) {
 	var pages = [];
 	for (var i = 0; i < p; i++) {
-		pages.push(`<span class="page" data-page="${i}">${i + 1}</span>`);
+		pages.push(`<span class="page" data-page="${i}"> ${i + 1}</span>`);
 	}
-	return pages.join();
+  pages = "Pages:  " + pages.join();
+  return pages;
 }
 
 $(document).on('click', '.select', function() {
@@ -85,12 +86,24 @@ function show(r) {
 		r._embedded.venues[0].state.name;
 	var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
 	count++;
-	return `</br><button class="select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
-		.localDate}" link="${r.url}" address="${address}">select</button>
-    <h5>${r.name}</h5><p>Date/Time: ${r.dates.start.localDate} ${time}</p>
-    <a href="${r.url}" target="_blank">Link to Details</a>
-    <img src="${r.images[0].url}"/></br>
-    <hr>`;
+  return `
+  <div clas="row" id="eachResult" style="background-image: url(${r.images[0].url}); border-bottom: 10px;">
+    <div class="row">
+      <div class="col-md-2">
+        <p>Date: ${r.dates.start.localDate}</p>
+      </div>
+      <div class="col-md-8"></div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-dark" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
+        .localDate}" link="${r.url}" address="${address}">select</button>
+      </div>
+    <div class="d-flex flex-column">
+      <div class="p-2"><h5>${r.name}</h5></div>
+      <div class="p-2"><p>${address} ${time}</p></div>
+      <div class="p-2"><a href="${r.url}" target="_blank">Link to Details</a></div>
+    </div>
+  </div>
+  `;
 }
 
 $(document).on('click', '#new-params', function() {

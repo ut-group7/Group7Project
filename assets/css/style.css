@@ -9,6 +9,17 @@ h5 {
     display: inline-block;
 }
 
+#instructions{
+    text-align: center;
+}
+
+#eachResult{
+    height: 200px;
+    color: whitesmoke;
+    font-size: 15px;
+    padding: 15px;
+}
+
 img {
     width: 205px;
     height: 115px;
@@ -17,6 +28,7 @@ img {
 body {
     margin: 0;
     padding: 0;
+    background-color: grey;
 }
 
 #map {
@@ -24,6 +36,10 @@ body {
     top: 40;
     bottom: 0;
     width: 50%;
+}
+
+#returned{
+    background-color: whitesmoke;
 }
 
 #headmap {
