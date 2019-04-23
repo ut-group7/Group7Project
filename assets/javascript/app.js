@@ -8,27 +8,9 @@ var config = {
 };
 firebase.initializeApp(config);
 const database = firebase.database();
-//=========================================
-//attemp to push user data. still need to get associated id
-
-// const dateRef = database.ref('date');
-// dateRef.push({
-// 	event: "event info here",
-// 	restaurant: "food info here"
-// })
-
-// dateRef.on("child_added", function(snapshot){
-// 	console.log(snapshot.val());
-// 	snapshot.forEach(function(childSnapshot){
-// 		var key = childSnapshot.key();
-// 		var data = childSnapshot.val();
-// 		console.log(key, data);
-// 	})
-// })
-//============================================
+$("#logOutBtn").hide();
 //===============================================================================================================
-//upon successful sign in the users local storage data ie the event and restaurant info should be saved to firebase
-//this way it can be retrieved and saved to the itinerary tab
+
 $(document).on("click", "#signUp", function() {
   event.preventDefault();
   var data = {
@@ -44,6 +26,9 @@ $(document).on("click", "#signUp", function() {
 			`);
 			console.log("Successfully created user account with uid:", user.uid);
 			$("#errorFrame").hide();
+			$("#logOutBtn").show();
+			$("#signUpBtn").hide();
+			$("#logInBtn").hide();
     })
     .catch(function(error) {
 			console.log("Error creating user:", error);
@@ -70,6 +55,10 @@ firebase
 				<p>You have logged in</p>
 				`)
 				$("#loginFail").hide();
+				$("#logOutBtn").show();
+				$("#signUpBtn").hide();
+				$("#logInBtn").hide();
+
 		})
 		.catch(function(err){
 				console.error(err);
@@ -77,6 +66,8 @@ firebase
 				<p>An error has occured, "${err.message}"</p>
 				`)
 		});
+		var user = firebase.auth().currentUser;
+console.log(user);
 })
 //===========================================================
 //================================
@@ -89,6 +80,9 @@ firebase
 .then(function(){
 	console.log("sign out successful")
 	$("#logOutSuccess").text("You have been signed out");
+	$("#logOutBtn").hide();
+	$("#signUpBtn").show();
+				$("#logInBtn").show();
 }).catch(function(error){
 	console.log("an error occured:", error)
 	})
@@ -290,13 +284,6 @@ $(document).on("click", ".newSelect", function() {
       "link"
     )}" target="_blank">Purchase Tickets</a>
     `);
-  $("#login").html(
-		`
-		<br/>
-		<p>To save your date, please sign up below</p>
-      
-      `
-  );
   // calls mapbox to map location selected
   // mapIt();
 });
