@@ -8,9 +8,14 @@ var config = {
 };
 firebase.initializeApp(config);
 const database = firebase.database();
-$("#logOutBtn").hide();
-//===============================================================================================================
+const usersRef = database.ref('users');
+console.log(usersRef);
+var user = firebase.auth().currentUser;
+console.log(user);
 
+
+//===============================================================================================================
+// sign up new user
 $(document).on("click", "#signUp", function() {
   event.preventDefault();
   var data = {
@@ -26,9 +31,11 @@ $(document).on("click", "#signUp", function() {
 			`);
 			console.log("Successfully created user account with uid:", user.uid);
 			$("#errorFrame").hide();
-			$("#logOutBtn").show();
-			$("#signUpBtn").hide();
-			$("#logInBtn").hide();
+			database.ref('users/' + user.uid).set({
+				userEmail: data.email,
+				userPW: data.password
+			})
+			
     })
     .catch(function(error) {
 			console.log("Error creating user:", error);
@@ -55,9 +62,7 @@ firebase
 				<p>You have logged in</p>
 				`)
 				$("#loginFail").hide();
-				$("#logOutBtn").show();
-				$("#signUpBtn").hide();
-				$("#logInBtn").hide();
+				
 
 		})
 		.catch(function(err){
@@ -66,8 +71,7 @@ firebase
 				<p>An error has occured, "${err.message}"</p>
 				`)
 		});
-		var user = firebase.auth().currentUser;
-console.log(user);
+		
 })
 //===========================================================
 //================================
@@ -80,15 +84,29 @@ firebase
 .then(function(){
 	console.log("sign out successful")
 	$("#logOutSuccess").text("You have been signed out");
-	$("#logOutBtn").hide();
-	$("#signUpBtn").show();
-				$("#logInBtn").show();
 }).catch(function(error){
 	console.log("an error occured:", error)
 	})
 });
-
 //================================
+// show appropriate buttons based on if user is logged in or not
+firebase.auth().onAuthStateChanged(function(user){
+	if (user) {
+		console.log("a user is signed in");
+		$("#signUpBtn").hide();
+				$("#logInBtn").hide();
+				$("#logOutBtn").show();
+				
+	} else {
+		console.log("no user is signed in")
+		$("#signUpBtn").show();
+				$("#logInBtn").show();
+				$("#logOutBtn").hide();
+	}
+})
+
+//===================================================================
+
 var date = moment().format("YYYY-MM-DD");
 var end = moment()
   .add(14, "days")
