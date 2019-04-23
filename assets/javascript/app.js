@@ -44,6 +44,7 @@ function makePages(p) {
 	}
   pages = "Pages:  " + pages.join();
   return pages;
+
 }
 
 $(document).on('click', '.select', function() {
@@ -51,7 +52,8 @@ $(document).on('click', '.select', function() {
 	localStorage.setItem('time', $(this).attr('time'));
 	localStorage.setItem('date', $(this).attr('date'));
 	localStorage.setItem('link', $(this).attr('link'));
-	localStorage.setItem('address', $(this).attr('address'));
+  localStorage.setItem('address', $(this).attr('address'));
+  $("#home-Submit").html(``);
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#next').html(``);
@@ -70,7 +72,7 @@ $(document).on('click', '.select', function() {
            </th>
             <br>
             <th>
-                <button type="button" class="btn btn-dark" id="new-params">Submit</button>
+                <button type="button" class="btn btn-primary btn-lg" id="new-params">Submit</button>
             </th>
     `);
 	$('#next').html('');
@@ -87,20 +89,22 @@ function show(r) {
 	var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
 	count++;
   return `
-  <div clas="row" id="eachResult" style="background-image: url(${r.images[0].url}); border-bottom: 10px;">
-    <div class="row">
-      <div class="col-md-2">
+  <div clas="row" id="eachResult" style="background-image: url(${r.images[0].url});">
+  <div id="result">  
+  <div class="row">
+      <div class="col-md-4 info">
         <p>Date: ${r.dates.start.localDate}</p>
       </div>
-      <div class="col-md-8"></div>
+      <div class="col-md-6"></div>
       <div class="col-md-2">
-        <button type="button" class="btn btn-dark" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
+        <button type="button" class="btn btn-primary select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
         .localDate}" link="${r.url}" address="${address}">select</button>
       </div>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column info">
       <div class="p-2"><h5>${r.name}</h5></div>
       <div class="p-2"><p>${address} ${time}</p></div>
       <div class="p-2"><a href="${r.url}" target="_blank">Link to Details</a></div>
+    </div>
     </div>
   </div>
   `;

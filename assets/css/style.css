@@ -1,12 +1,22 @@
-#header {
-    text-align: center;
-    background-color: royalblue;
-    color: whitesmoke;
-    text-shadow: 2px 2px goldenrod;
+body {
+    background-image: url('../images/city.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
 }
 
-h5 {
-    display: inline-block;
+#header {
+    margin-top: 100px;
+    background-color: rgba(66, 66, 66, .7);
+    text-align: center;
+    color: darkblue;
+    text-shadow: 2px 2px lightslategray;
+}
+
+h1 {
+    font-size: 65px;
+    font-weight: bolder; 
 }
 
 #instructions{
@@ -14,10 +24,19 @@ h5 {
 }
 
 #eachResult{
-    height: 200px;
-    color: whitesmoke;
+    color: black;
     font-size: 15px;
+    height: 200px;
+}
+
+#result{
+    background: rgba(255,255,255,.5);
     padding: 15px;
+}
+
+.info{
+    background: rgba(255,255,255,.1);
+    text-shadow: 2px 2px white;
 }
 
 img {
@@ -25,11 +44,46 @@ img {
     height: 115px;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: grey;
+#form-row {
+    justify-content: center;
+    align-content: center;
 }
+
+#find {
+    display: inline-flex;
+}
+
+.form-group {
+    display: inline-flex;
+}
+
+#city-input, #miles-input, #search-input {
+    height: 50px;
+    margin-right: 10px;
+}
+
+label {
+    background-color: darkblue;
+    color: white;
+    font-size: 15px;
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#home-Submit {
+    margin-top: 40px;
+    justify-content: center;
+}
+
+#select-state {
+    height: 50px;
+    margin-right: 10px;
+}
+
+
+/* ------------MAP CSS-------*/
 
 #map {
     position: absolute;
@@ -48,3 +102,7 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+
+
+
