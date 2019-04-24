@@ -354,16 +354,15 @@ $(document).on('click', '.newSelect', function() {
 			food: sessionStorage.getItem('yName'),
 		})
 		console.log(user.uid);
+		var userRef = user.uid;
 		var postId = newPostRef.key;
 		console.log(postId);
-		// var admin = require("firebase-admin");
-		// var db = admin.database();
-		// var ref = db.ref('users/user.uid/postId');
-		// ref.on("value", function(snapshot){
-		// 	console.log(snapshot.val());
-		// }, function (errorObject) {
-		// 	console.log("The read failed: " + errorObject.code);
-		// });
+		database.ref(`users/${userRef}/${postId}`).on("value", function(snapshot){
+			console.log(snapshot.val());
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject.code);
+		});
+		
 	}
 	// calls mapbox to map location selected
 	mapIt();
@@ -388,3 +387,13 @@ function mapIt() {
 	})
 }
 
+$(document).on("click", "#eventBtn", function(){
+		// var admin = require("firebase-admin");
+		// var db = admin.database();
+		// var ref = db.ref('users/user.uid/postId');
+		database.ref('users/user.uid/postId').on("value", function(snapshot){
+			console.log(snapshot.val());
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject.code);
+		});
+})
