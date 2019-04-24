@@ -376,3 +376,4 @@ function mapIt() {
 		map.addControl(directions, 'top-left');
 	})
 }
+
