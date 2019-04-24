@@ -47,12 +47,31 @@ function makePages(p) {
 
 }
 
+
+$(document).on("click", ".page", function(){
+  page = $(this).attr("data-page");
+  console.log(this);
+  $("#options").html("");
+  var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
+  console.log(queryURL);
+  $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function(response) {
+        console.log(response);
+      $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
+      <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
+      $("#options").append(response._embedded.events.map(show));
+      count = 0;
+    });
+  });
+
 $(document).on('click', '.select', function() {
 	localStorage.setItem('event', $(this).attr('event'));
 	localStorage.setItem('time', $(this).attr('time'));
 	localStorage.setItem('date', $(this).attr('date'));
 	localStorage.setItem('link', $(this).attr('link'));
-  localStorage.setItem('address', $(this).attr('address'));
+  localStorage.setItem('tmAddress', $(this).attr('address'));
   $("#home-Submit").html(``);
 	$('#options').html(``);
 	$('#instructions').html(``);
@@ -80,6 +99,12 @@ $(document).on('click', '.select', function() {
 
 function show(r) {
 	var i = count;
+  var back = "";
+  if(i===0 || i%2===0){
+    back = "dark";
+  }else{
+    back = "light";
+  }
 	address =
 		r._embedded.venues[0].address.line1 +
 		', ' +
@@ -89,23 +114,22 @@ function show(r) {
 	var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
 	count++;
   return `
-  <div clas="row" id="eachResult" style="background-image: url(${r.images[0].url});">
-  <div id="result">  
-  <div class="row">
-      <div class="col-md-4 info">
-        <p>Date: ${r.dates.start.localDate}</p>
-      </div>
-      <div class="col-md-6"></div>
-      <div class="col-md-2">
-        <button type="button" class="btn btn-primary select" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
-        .localDate}" link="${r.url}" address="${address}">select</button>
-      </div>
-    <div class="d-flex flex-column info">
-      <div class="p-2"><h5>${r.name}</h5></div>
-      <div class="p-2"><p>${address} ${time}</p></div>
-      <div class="p-2"><a href="${r.url}" target="_blank">Link to Details</a></div>
+  <div class="row eachResult ${back}">
+    <div class="col-md-6 info">
+      <div class="d-flex flex-column info">
+        <div class="p-2"><p>Date: ${r.dates.start.localDate}</p></div>
+        <div class="p-2"><h5>${r.name}</h5></div>
+        <div class="p-2"><p>${address} ${time}</p></div>
+        <div class="p-2"><a href="${r.url}" target="_blank">Link to Details</a></div>
+      </div>   
     </div>
-    </div>
+      <div class="col-md-2"></div>
+      <div class="col-md-4">
+        <div class="p-2"><img alt="Venue Image" src="${r.images[0].url}"/></div>
+        <div class="p-2"><button type="button" class="btn btn-primary select" backColor="${back}" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
+          .localDate}" link="${r.url}" address="${address}">select</button></div>
+      </div>
+    </div> 
   </div>
   `;
 }
@@ -145,14 +169,18 @@ $(document).on('click', '#new-params', function() {
 			} else {
 				dollarSign = dollarSign + ',' + dollars4;
 			}
-		}
-		return dollarSign;
+    }
+    if(dollarSign === ''){
+      return dollarSign;
+    }
+    dollarSign = "&price=" + dollarSign;
+    return dollarSign;
 	}
 
 	var eventTime = localStorage.getItem('time');
 	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
 
-	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}&price=${dollarSign}&limit=10&open_at=${isOpen}`;
+	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}`;
 
 	$.ajax({
 		url: newURL,
@@ -173,17 +201,36 @@ $(document).on('click', '#new-params', function() {
 });
 
 function display(r) {
-	var i = count;
-	count++;
-	return `</br><button class="newSelect" value="${i}" name="${r.name}">select</button>
-    <h5>${r.name}</h5><p>Price: ${r.price} Phone Number: ${r.display_phone} Address: ${r.location
-		.display_address[0]}, ${r.location.display_address[1]}</p>
-    <a href="${r.url}" target="_blank">Link to Details on Yelp</a>
-    <img src="${r.image_url}"/></br>
-    <hr>`;
+  var yAddress = r.location.display_address.join(" ");
+  var i = count;
+  var back = "";
+  count++;
+  if(i===0 || i%2===0){
+    back = "even";
+  }else{
+    back = "odd";
+  }
+  return `
+  <div class="row yResults ${back}">
+    <div class="col-md-6 left">
+      <div class="d-flex flex-column">
+        <div class="p-2"><h5>${r.name}  Price: ${r.price}</h5></div>
+        <div class="p-2"> Phone Number: ${r.display_phone}</div>
+        <div class="p-2"> Address: ${yAddress}</div>
+        <div class="p-2"> <a href="${r.url}" target="_blank">Link to Details on Yelp</a> </div>
+      </div> 
+    </div> 
+    <div class="col-md-2"></div>  
+    <div class="col-md-4 right">
+      <div class="p-2"><img alt="Venue Image" src="${r.image_url}"/></div>
+      <div class="p-2"><button class="newSelect"  value="${i}" name="${r.name}" address="${yAddress}">select</button></div>
+    </div>
+  </div>  
+    `;
 }
 
 $(document).on('click', '.newSelect', function() {
+  localStorage.setItem('yAddress', $(this).attr('address'));
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
@@ -200,7 +247,7 @@ $(document).on('click', '.newSelect', function() {
 });
 
 function mapIt() {
-	var destination = localStorage.getItem('address');
+	var destination = localStorage.getItem('tmAddress');
 	var city = localStorage.getItem('city');
 	console.log('destination ' + destination);
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZnJlZDFuIiwiYSI6ImNqdW5ibmkyMjBpMnc0MHBuZXlxc3dkcHgifQ.O_czpPEJoyLfkymB0dicCQ';
