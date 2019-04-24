@@ -103,6 +103,9 @@ var count = 0;
 var page = 0;
 var miles;
 var address;
+var dollarSign;
+var food;
+var yPageCount = 1;
 
 $('#add-params').on('click', function() {
 	city = $('#city-input').val();
@@ -233,14 +236,14 @@ function show(r) {
 }
 
 $(document).on('click', '#new-params', function() {
-	var food = $('#food-input').val();
+	food = $('#food-input').val();
 	var city = sessionStorage.getItem('city');
 
 	var dollars = $("input[name='price']:checked").val();
 	var dollars2 = $("input[name='price2']:checked").val();
 	var dollars3 = $("input[name='price3']:checked").val();
 	var dollars4 = $("input[name='price4']:checked").val();
-	var dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
+	dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
 
 	function isChecked(dollars, dollars2, dollars3, dollars4) {
 		var dollarSign = '';
@@ -277,8 +280,8 @@ $(document).on('click', '#new-params', function() {
 
 	var eventTime = sessionStorage.getItem('time');
 	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
-
-	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}`;
+  console.log(yPageCount);
+	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
 
 	$.ajax({
 		url: newURL,
@@ -289,14 +292,59 @@ $(document).on('click', '#new-params', function() {
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
+
 			console.log(data);
 			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
-			$('#choices').html(``);
-			$('#choices').append(data.businesses.map(display));
-		}
-	});
+      $("#choices").html(``);
+      $("#choices").append(data.businesses.map(display));
+      $("#next").html(yelpPages(data));
+    }
+  });
 });
+
+function yelpPages(p) {
+  var pages = [];
+ 
+  count = p.total / 10;
+  if(count>10){
+    count = 10;
+  }
+	for (var i = 0; i < count; i++) {
+    console.log((i*10)+1);
+		pages.push(`<span class="yPage" data-page="${(i*10)+1}"> ${i + 1}</span>`);
+	}
+  pages = "Pages:  " + pages.join();
+  return pages;
+
+}
+
+$(document).on("click", ".yPage", function(){
+  var eventTime = sessionStorage.getItem('time');
+	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
+  yPageCount = $(this).attr("data-page");
+  console.log(yPageCount);
+	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
+
+	$.ajax({
+		url: newURL,
+		headers: {
+			Authorization:
+				'Bearer 1CVYoXqsRViH_HtqoMSa7s5kkNBOA8qLuUeqLM2TAaekisIeSLsahjgzH7hcRCbXF7ltlBapaeEBqTm8ojpZB9xPcCuiyUzjMQw9NaxwlPrkF_QJZQgQiFmSsnu2XHYx'
+		},
+		method: 'GET',
+		dataType: 'json',
+		success: function(data) {
+
+			console.log(data);
+			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
+          <p>And then select the one you want to go to.</p>`);
+      $("#choices").html(``);
+      $("#choices").append(data.businesses.map(display));
+    }
+  });
+  });
+
 
 function display(r) {
 	var yAddress = r.location.display_address.join(' ');
