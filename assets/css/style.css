@@ -8,6 +8,7 @@ body {
 
 }
 
+
 /*----------Hiding scrollbars on multiple browsers-----*/
 body::-webkit-scrollbar { width: 0 !important }
 body { overflow: -moz-scrollbars-none; }
@@ -15,6 +16,30 @@ body { -ms-overflow-style: none; }
 
 
 
+.dark{
+    background-color: lightgray;
+    color: black;
+}
+
+.light{
+    background-color: whitesmoke;
+    color: black;
+}
+
+.odd{
+    background-color: lightgray;
+    color: black;
+}
+
+.even{
+    background-color: whitesmoke;
+    color: black;
+}
+
+.right{
+    margin-left: auto;
+    margin-right: auto;
+}
 
 
 #header {
@@ -30,13 +55,34 @@ h1 {
     font-family: 'Rubik', 'Roboto', sans-serif;  
 }
 
-h5{
-    display: inline-block;
+#instructions{
+    text-align: center;
+    background-color: darkblue;
+    color: whitesmoke;
+}
+
+#eachResult{
+    color: whitesmoke;
+    font-size: 15px;
+    height: 200px;
+}
+
+#results{
+    padding: 15px;
+    font-weight: 900;
+    color: whitesmoke;
 }
 
 img {
     width: 205px;
     height: 115px;
+}
+
+#next{
+    color: whitesmoke;
+    font-size: 25px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 #form-row {
@@ -71,6 +117,7 @@ label {
 
 #home-Submit {
     margin-top: 40px;
+    padding-bottom: 15px;
     justify-content: center;
 }
 
@@ -78,6 +125,7 @@ label {
     height: 50px;
     margin-right: 10px;
 }
+
 
 
 /* ------------MAP CSS-------*/
@@ -88,6 +136,7 @@ label {
     bottom: 0;
     width: 50%;
 }
+
 
 #headmap {
     display: flex;
