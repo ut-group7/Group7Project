@@ -8,10 +8,9 @@ var config = {
 };
 firebase.initializeApp(config);
 const database = firebase.database();
-const usersRef = database.ref('users');
-console.log(usersRef);
 var user = firebase.auth().currentUser;
 console.log(user);
+
 
 
 //===============================================================================================================
@@ -31,11 +30,6 @@ $(document).on("click", "#signUp", function() {
 			`);
 			console.log("Successfully created user account with uid:", user.uid);
 			$("#errorFrame").hide();
-			database.ref('users/' + user.uid).set({
-				userEmail: data.email,
-				userPW: data.password
-			})
-			
     })
     .catch(function(error) {
 			console.log("Error creating user:", error);
@@ -96,7 +90,7 @@ firebase.auth().onAuthStateChanged(function(user){
 		$("#signUpBtn").hide();
 				$("#logInBtn").hide();
 				$("#logOutBtn").show();
-				
+					
 	} else {
 		console.log("no user is signed in")
 		$("#signUpBtn").show();
@@ -119,7 +113,7 @@ var address;
 
 $("#add-params").on("click", function() {
   city = $("#city-input").val();
-  localStorage.setItem("city", city);
+  sessionStorage.setItem("city", city);
   miles = $("#miles-input").val();
   state = $("#select-state option:selected").attr("value");
   var category = "";
@@ -128,7 +122,7 @@ $("#add-params").on("click", function() {
   if (category !== "") {
     keyword = `&keyword=${category}`;
   }
-  localStorage.setItem("state", state);
+  sessionStorage.setItem("state", state);
   console.log(state);
   var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}${keyword}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
   console.log(queryURL);
@@ -157,11 +151,11 @@ function makePages(p) {
 }
 
 $(document).on("click", ".select", function() {
-  localStorage.setItem("event", $(this).attr("event"));
-  localStorage.setItem("time", $(this).attr("time"));
-  localStorage.setItem("date", $(this).attr("date"));
-  localStorage.setItem("link", $(this).attr("link"));
-  localStorage.setItem("address", $(this).attr("address"));
+  sessionStorage.setItem("event", $(this).attr("event"));
+  sessionStorage.setItem("time", $(this).attr("time"));
+  sessionStorage.setItem("date", $(this).attr("date"));
+  sessionStorage.setItem("link", $(this).attr("link"));
+  sessionStorage.setItem("address", $(this).attr("address"));
   $("#options").html(``);
   $("#instructions").html(``);
   $("#next").html(``);
@@ -209,7 +203,7 @@ function show(r) {
 
 $(document).on("click", "#new-params", function() {
   var food = $("#food-input").val();
-  var city = localStorage.getItem("city");
+  var city = sessionStorage.getItem("city");
 
   var dollars = $("input[name='price']:checked").val();
   var dollars2 = $("input[name='price2']:checked").val();
@@ -246,7 +240,7 @@ $(document).on("click", "#new-params", function() {
     return dollarSign;
   }
 
-  var eventTime = localStorage.getItem("time");
+  var eventTime = sessionStorage.getItem("time");
   var isOpen = moment(eventTime, "hh:mm a")
     .subtract(3, "hours")
     .format("X");
@@ -288,27 +282,35 @@ function display(r) {
     <hr>`;
 }
 
-$(document).on("click", ".newSelect", function() {
+$(document).on("click", ".newSelect", function(user) {
+	var user = firebase.auth().currentUser;
   $("#options").html(``);
   $("#instructions").html(``);
   $("#find").html(``);
   $("#choices").html(``);
   $("#results").html(`
     <h1>You are going to eat at ${$(this).attr("name")}.</h1>
-    <h1>And then going to ${localStorage.getItem(
+    <h1>And then going to ${sessionStorage.getItem(
       "event"
-    )} at ${localStorage.getItem("time")} on ${localStorage.getItem("date")}</h1>
-    <a href="${localStorage.getItem(
+    )} at ${sessionStorage.getItem("time")} on ${sessionStorage.getItem("date")}</h1>
+    <a href="${sessionStorage.getItem(
       "link"
     )}" target="_blank">Purchase Tickets</a>
-    `);
+		`
+		);
+		var newPostRef = 	database.ref('users/' + user.uid).push({
+			event: sessionStorage.getItem("event")
+		})
+		console.log(user.uid);
+		var postId = newPostRef.key;
+		console.log(postId);
   // calls mapbox to map location selected
-  // mapIt();
+	// mapIt();
 });
 
 // function mapIt() {
-//   var destination = localStorage.getItem("address");
-//   var city = localStorage.getItem("city");
+//   var destination = sessionStorage.getItem("address");
+//   var city = sessionStorage.getItem("city");
 //   console.log("destination " + destination);
 //   mapboxgl.accessToken =
 //     "pk.eyJ1IjoiZnJlZDFuIiwiYSI6ImNqdW5ibmkyMjBpMnc0MHBuZXlxc3dkcHgifQ.O_czpPEJoyLfkymB0dicCQ";
