@@ -9,10 +9,6 @@ var config = {
 firebase.initializeApp(config);
 const database = firebase.database();
 var user = firebase.auth().currentUser;
-console.log(user);
-
-
-
 //===============================================================================================================
 // sign up new user
 $(document).on("click", "#signUp", function() {
@@ -56,8 +52,6 @@ firebase
 				<p>You have logged in</p>
 				`)
 				$("#loginFail").hide();
-				
-
 		})
 		.catch(function(err){
 				console.error(err);
@@ -90,12 +84,13 @@ firebase.auth().onAuthStateChanged(function(user){
 		$("#signUpBtn").hide();
 				$("#logInBtn").hide();
 				$("#logOutBtn").show();
-					
+				$("#eventBtn").show();
 	} else {
 		console.log("no user is signed in")
 		$("#signUpBtn").show();
 				$("#logInBtn").show();
 				$("#logOutBtn").hide();
+				$("#eventBtn").hide();
 	}
 })
 
@@ -331,12 +326,13 @@ function display(r) {
       <div class="p-2"><button type="button" class="btn btn-primary newSelect" value="${i}" name="${r.name}" address="${yAddress}">select</button></div>
     </div>
   </div>  
-    `;
+		`;
 }
 
 $(document).on('click', '.newSelect', function() {
 	var user = firebase.auth().currentUser;
-  sessionStorage.setItem('yAddress', $(this).attr('address'));
+	sessionStorage.setItem('yAddress', $(this).attr('address'));
+	sessionStorage.setItem('yName', $(this).attr('name'));
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
@@ -348,12 +344,27 @@ $(document).on('click', '.newSelect', function() {
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h1>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
+		var user = firebase.auth().currentUser;
+		if (user) {
 		var newPostRef = 	database.ref('users/' + user.uid).push({
-			event: sessionStorage.getItem("event")
+			event: sessionStorage.getItem('event'),
+			time: sessionStorage.getItem('time'),
+			date: sessionStorage.getItem('date'),
+			link: sessionStorage.getItem('link'),
+			food: sessionStorage.getItem('yName'),
 		})
 		console.log(user.uid);
 		var postId = newPostRef.key;
 		console.log(postId);
+		// var admin = require("firebase-admin");
+		// var db = admin.database();
+		// var ref = db.ref('users/user.uid/postId');
+		// ref.on("value", function(snapshot){
+		// 	console.log(snapshot.val());
+		// }, function (errorObject) {
+		// 	console.log("The read failed: " + errorObject.code);
+		});
+	}
 	// calls mapbox to map location selected
 	mapIt();
 });
