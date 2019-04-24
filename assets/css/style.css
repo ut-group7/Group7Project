@@ -1,10 +1,11 @@
+
 body {
     background-image: url('../images/city.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    margin: 0;
-    padding: 0;
+    height: 100vh;
+    overflow-x: hidden;
 }
 
 /*----------Hiding scrollbars on multiple browsers-----*/
@@ -96,7 +97,7 @@ img {
     display: inline-flex;
 }
 
-#city-input, #miles-input, #search-input, #food-input, #registerEmail, #registerPassword {
+#city-input, #miles-input, #search-input, #food-input, #registerEmail, #registerPassword, #select-state {
     height: 50px;
     margin-right: 10px;
 }
@@ -116,11 +117,6 @@ label {
     margin-top: 40px;
     padding-bottom: 15px;
     justify-content: center;
-}
-
-#select-state {
-    height: 50px;
-    margin-right: 10px;
 }
 
 #new-params {
