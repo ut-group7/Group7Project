@@ -12,6 +12,9 @@
   
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--Google Fonts Link-->    
+    <link href="https://fonts.googleapis.com/css?family=Roboto:900i|Rubik:900i" rel="stylesheet">
+
     <!-- Points CSS file. -->
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css">
 
@@ -120,7 +123,7 @@
         <form id="find">
             <th>
                 <div class="form-group">
-                    <label for="name-input">City:</label>
+                    <label for="name-input align-middle">City:</label>
                     <input class="form-control" id="city-input" type="text">
                 </div>
             </th>
@@ -182,13 +185,13 @@
             </th>
             <th>
                 <div class="form-group">
-                    <label for="rate-input">Distance in Miles</label>
+                    <label for="rate-input">Miles From:</label>
                     <input class="form-control" id="miles-input" type="number">
                 </div>
             </th>
             <th>
               <div class="form-group">
-                  <label for="name-input">Search Category (optional):</label>
+                  <label for="name-input">Category <br/> (optional):</label>
                   <input class="form-control" id="search-input" type="text">
               </div>
           </th>
@@ -198,18 +201,22 @@
     <div class="row" id="home-Submit">
         <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
     </div>
-        <div id="instructions"></div>
-        <span id="options"></span>
-        <span id="choices"></span>
-        <span id="results"></span>
-        <span id="login"></span>
-        <div id="next"></div>
-       
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" id="returned">
+          <div id="instructions"></div>
+          <span id="options"></span>
+          <span id="choices"></span>
+          <span id="results"></span>
+          <div id="next"></div>
+        </div>
+        <div class="col-md-2"></div>
+        </div> 
         <!-- Map ID -->
         <div id='headmap'>
             <div id='map'></div>
         </div>
-    </body>
+    </body> 
 </container>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
