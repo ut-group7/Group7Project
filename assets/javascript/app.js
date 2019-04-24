@@ -363,7 +363,7 @@ $(document).on('click', '.newSelect', function() {
 		// 	console.log(snapshot.val());
 		// }, function (errorObject) {
 		// 	console.log("The read failed: " + errorObject.code);
-		});
+		// });
 	}
 	// calls mapbox to map location selected
 	mapIt();
