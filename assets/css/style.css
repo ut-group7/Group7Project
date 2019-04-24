@@ -2,21 +2,32 @@ body {
     background-image: url('../images/city.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
     margin: 0;
     padding: 0;
+
 }
+
+/*----------Hiding scrollbars on multiple browsers-----*/
+body::-webkit-scrollbar { width: 0 !important }
+body { overflow: -moz-scrollbars-none; }
+body { -ms-overflow-style: none; }
+
+
+
+
 
 #header {
     margin-top: 100px;
-    background-color: rgba(66, 66, 66, .7);
+    background-color: rgba(66, 66, 66, .6);
     text-align: center;
-    color: darkblue;
+    color: rgb(4, 4, 182);
     text-shadow: 2px 2px lightslategray;
 }
 
 h1 {
-    font-size: 65px;
-    font-weight: bolder; 
+    font-size: 80px;
+    font-family: 'Rubik', 'Roboto', sans-serif;  
 }
 
 h5{
@@ -54,6 +65,7 @@ label {
     width: 200px;
     height: 50px;
     text-align: center;
+    text-justify: middle;
     border-radius: 5px;
 }
 
