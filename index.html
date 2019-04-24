@@ -22,6 +22,99 @@
 <container>
 
     <body>
+            <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">
+        Sign up here!
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModallLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="signUpModalLabel">Enter your email and password to create an account</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                            <label for="name-input">Email Address</label>
+                            <input class="form-control" id="registerEmail" type="text">
+                            <br/>
+                            <label for="password-input">Password</label>
+                            <input class="form-control" id="registerPassword" type="password">
+                            <br/>
+                        </div> 
+                        <span id="signUpSuccess"></span>
+                        <span id="errorFrame"></span>
+            </div>
+            <div class="modal-footer">
+                    <button type="submit" id="signUp" class="btn btn-primary">Submit</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks (continue without creating an account)</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- LOGIN -->
+                  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="logInBtn">
+        Log In
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="loginModalLabel">Please login below</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                            <label for="name-input">Email Address</label>
+                            <input class="form-control" id="loginEmail" type="text">
+                            <br/>
+                            <label for="password-input">Password</label>
+                            <input class="form-control" id="loginPassword" type="password">
+                            <br/>
+                        </div> 
+                        <span id="loginSuccess"></span>
+                        <span id="loginFail"></span>
+            </div>
+            <div class="modal-footer">
+                    <button type="submit" id="login" class="btn btn-primary">Login</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>
+            Log Out
+          </button>
+          
+          <!-- Modal -->
+          <div class="modal fade" id="logOutModal" tabindex="-1" role="dialog" aria-labelledby="logOutModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="logOutModalLabel"><span id="logOutSuccess"></span></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                
+                <div class="modal-footer">
+                        
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+          </div>
+        </div>
+    
         <div class="jumbotron" id="header">
             <h1 class="display-12">Date Night Planner</h1>
         </div>
@@ -125,7 +218,10 @@
         </div>
     </body> 
 </container>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
 <script src="https://unpkg.com/moment"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.0.min.js"
