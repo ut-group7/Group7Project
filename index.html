@@ -30,7 +30,7 @@
         <form id="find">
             <th>
                 <div class="form-group">
-                    <label for="name-input align-middle">City:</label>
+                    <label for="name-input">City:</label>
                     <input class="form-control" id="city-input" type="text">
                 </div>
             </th>
@@ -108,17 +108,22 @@
     <div class="row" id="home-Submit">
         <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
     </div>
-        <div id="instructions"></div>
-        <span id="options"></span>
-        <span id="choices"></span>
-        <span id="results"></span>
-        <div id="next"></div>
-       
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8" id="returned">
+          <div id="instructions"></div>
+          <span id="options"></span>
+          <span id="choices"></span>
+          <span id="results"></span>
+          <div id="next"></div>
+        </div>
+        <div class="col-md-2"></div>
+        </div> 
         <!-- Map ID -->
         <div id='headmap'>
             <div id='map'></div>
         </div>
-    </body>
+    </body> 
 </container>
 
 <script src="https://unpkg.com/moment"></script>
