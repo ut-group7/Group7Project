@@ -79,7 +79,7 @@ $(document).on('click', '.select', function() {
 	$('#find').html(`
     <th>
                 <div class="form-group">
-                    <label for="name-input">What type of food do you want?</label>
+                    <label for="name-input">Food Type</label>
                     <input class="form-control" id="food-input" type="text">
                 </div>
             </th>
@@ -223,7 +223,7 @@ function display(r) {
     <div class="col-md-2"></div>  
     <div class="col-md-4 right">
       <div class="p-2"><img alt="Venue Image" src="${r.image_url}"/></div>
-      <div class="p-2"><button class="newSelect"  value="${i}" name="${r.name}" address="${yAddress}">select</button></div>
+      <div class="p-2"><button type="button" class="btn btn-primary newSelect" value="${i}" name="${r.name}" address="${yAddress}">select</button></div>
     </div>
   </div>  
     `;
