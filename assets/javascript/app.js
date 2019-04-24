@@ -389,12 +389,14 @@ $(document).on('click', '.newSelect', function() {
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
-	var newPostRef = database.ref('users/' + user.uid).push({
-		event: sessionStorage.getItem('event')
-	});
-	console.log(user.uid);
-	var postId = newPostRef.key;
-	console.log(postId);
+
+	/*---------------Code for login temporarily quoted out to keep app functional------------*/	
+	//var newPostRef = database.ref('users/' + user.uid).push({
+		//event: sessionStorage.getItem('event')
+	//});
+	//console.log(user.uid);
+	//var postId = newPostRef.key;
+	//console.log(postId);
 	// calls mapbox to map location selected
 	mapIt();
 });
@@ -420,6 +422,5 @@ function mapIt() {
 		// Paramaters that pass starting point and Destination
 		directions.setOrigin(startPoint);
 		directions.setDestination(destination);
-		$('#map-div').show();
 	});
 }
