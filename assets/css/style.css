@@ -8,63 +8,71 @@ body {
 }
 
 /*----------Hiding scrollbars on multiple browsers-----*/
-body::-webkit-scrollbar { width: 0 !important }
-body { overflow: -moz-scrollbars-none; }
-body { -ms-overflow-style: none; }
 
+body::-webkit-scrollbar {
+    width: 0 !important
+}
 
+body {
+    overflow: -moz-scrollbars-none;
+}
 
-.dark{
+body {
+    -ms-overflow-style: none;
+}
+
+.dark {
     background-color: lightgray;
     color: black;
 }
 
-.light{
+.light {
     background-color: whitesmoke;
     color: black;
 }
 
-.odd{
+.odd {
     background-color: lightgray;
     color: black;
 }
 
-.even{
+.even {
     background-color: whitesmoke;
     color: black;
 }
 
-.right{
+.right {
     margin-left: auto;
     margin-right: auto;
 }
 
 #header {
-    margin-top: 100px;
+    margin-top: 25px;
     background-color: rgba(66, 66, 66, .7);
     text-align: center;
     color: rgb(8, 8, 190);
     text-shadow: 2px 2px lightslategray;
+    height: 150px;
 }
 
 h1 {
-    font-size: 80px;
-    font-family: 'Rubik', 'Roboto', sans-serif;  
+    font-size: 55px;
+    font-family: 'Rubik', 'Roboto', sans-serif;
 }
 
-#instructions{
+#instructions {
     text-align: center;
     background-color: darkblue;
     color: whitesmoke;
 }
 
-#eachResult{
+#eachResult {
     color: whitesmoke;
     font-size: 15px;
     height: 200px;
 }
 
-#results{
+#results {
     padding: 15px;
     font-weight: 900;
     color: whitesmoke;
@@ -75,7 +83,7 @@ img {
     height: 115px;
 }
 
-#next{
+#next {
     color: whitesmoke;
     font-size: 25px;
     font-weight: 600;
@@ -86,7 +94,6 @@ img {
     justify-content: center;
     align-content: center;
 }
-
 
 #find {
     display: inline-flex;
@@ -134,7 +141,6 @@ label {
     padding-left: 10px;
 }
 
-
 @media only screen and (max-width: 600px) {
     #find {
       display: inline-grid;
@@ -170,12 +176,11 @@ label {
 /* ------------MAP CSS-------*/
 
 #map {
-    position: absolute;
-    top: 40;
+    width: 100%;
+    padding-top: 200px;
+    padding-bottom: 200px;
     bottom: 0;
-    width: 50%;
 }
-
 
 #headmap {
     display: flex;
@@ -183,7 +188,3 @@ label {
     justify-content: center;
     align-items: center;
 }
-
-
-
-
