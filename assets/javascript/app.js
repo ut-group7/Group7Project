@@ -83,7 +83,7 @@ $(document).on('click', '.select', function() {
                     <input class="form-control" id="food-input" type="text">
                 </div>
             </th>
-            <th>
+            <th id=dollar-data class=rounded-pill>
             $: <input type="checkbox" name="price" class="myCheck"  value="1">
             $$: <input type="checkbox" name="price2" class="myCheck"  value="2">
             $$$: <input type="checkbox" name="price3" class="myCheck"  value="3">

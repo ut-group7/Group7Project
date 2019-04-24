@@ -15,7 +15,6 @@ body { -ms-overflow-style: none; }
 
 
 
-
 .dark{
     background-color: lightgray;
     color: black;
@@ -43,9 +42,9 @@ body { -ms-overflow-style: none; }
 
 #header {
     margin-top: 100px;
-    background-color: rgba(66, 66, 66, .6);
+    background-color: rgba(66, 66, 66, .7);
     text-align: center;
-    color: rgb(4, 4, 182);
+    color: rgb(8, 8, 190);
     text-shadow: 2px 2px lightslategray;
 }
 
@@ -97,7 +96,7 @@ img {
     display: inline-flex;
 }
 
-#city-input, #miles-input, #search-input {
+#city-input, #miles-input, #search-input, #food-input {
     height: 50px;
     margin-right: 10px;
 }
@@ -122,6 +121,17 @@ label {
 #select-state {
     height: 50px;
     margin-right: 10px;
+}
+
+#new-params {
+    margin-left: 25px;
+}
+
+#dollar-data {
+    background: rgba(75, 102, 255, 0.6);
+    height: 50px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 
