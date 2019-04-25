@@ -403,13 +403,13 @@ $(document).on('click', '.newSelect', function() {
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
-  $('#choices').html(``);
-  $("#next").html(``);
+  	$('#choices').html(``);
+  	$("#next").html(``);
 	$('#results').html(`
-    <h1>You are going to eat at ${$(this).attr('name')}.</h1>
-    <h1>And then going to ${sessionStorage.getItem(
+    <h2>You are going to eat at ${$(this).attr('name')}.</h2>
+    <h2>And then going to ${sessionStorage.getItem(
 		'event'
-	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h1>
+	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
 
@@ -426,7 +426,9 @@ $(document).on('click', '.newSelect', function() {
 
 
 function mapIt() {
-	var destination = sessionStorage.getItem('tmAddress');
+	var startPoint = sessionStorage.getItem('city') + ',' + sessionStorage.getItem('state');
+	console.log('startPoint' + startPoint);
+	var destination = sessionStorage.getItem('yAddress');
 	var city = sessionStorage.getItem('city');
 	console.log('destination ' + destination);
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZnJlZDFuIiwiYSI6ImNqdW5ibmkyMjBpMnc0MHBuZXlxc3dkcHgifQ.O_czpPEJoyLfkymB0dicCQ';
