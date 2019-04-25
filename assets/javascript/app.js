@@ -385,8 +385,8 @@ $(document).on("click", "#eventBtn", function(){
 	console.log(postId);
 
 
-
-	database.ref(`users/${userRef}/${postId}`).on("value", function(snapshot){
+																	//${postId}
+	database.ref(`users/${userRef}`).on("value", function(snapshot){
 		var snap = snapshot.val();
 		console.log(snap);
 		$("#yourEventFrame").html(`
