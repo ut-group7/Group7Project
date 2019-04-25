@@ -344,26 +344,7 @@ $(document).on('click', '.newSelect', function() {
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h1>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
-		var user = firebase.auth().currentUser;
-		if (user) {
-		var newPostRef = 	database.ref('users/' + user.uid).push({
-			event: sessionStorage.getItem('event'),
-			time: sessionStorage.getItem('time'),
-			date: sessionStorage.getItem('date'),
-			link: sessionStorage.getItem('link'),
-			food: sessionStorage.getItem('yName'),
-		})
-		console.log(user.uid);
-		var userRef = user.uid;
-		var postId = newPostRef.key;
-		console.log(postId);
-		database.ref(`users/${userRef}/${postId}`).on("value", function(snapshot){
-			console.log(snapshot.val());
-		}, function (errorObject) {
-			console.log("The read failed: " + errorObject.code);
-		});
 		
-	}
 	// calls mapbox to map location selected
 	mapIt();
 });
@@ -388,12 +369,33 @@ function mapIt() {
 }
 
 $(document).on("click", "#eventBtn", function(){
-		// var admin = require("firebase-admin");
-		// var db = admin.database();
-		// var ref = db.ref('users/user.uid/postId');
-		database.ref('users/user.uid/postId').on("value", function(snapshot){
-			console.log(snapshot.val());
-		}, function (errorObject) {
-			console.log("The read failed: " + errorObject.code);
-		});
-})
+	var user = firebase.auth().currentUser;
+	if (user) {
+	var newPostRef = 	database.ref('users/' + user.uid).push({
+		event: sessionStorage.getItem('event'),
+		time: sessionStorage.getItem('time'),
+		date: sessionStorage.getItem('date'),
+		link: sessionStorage.getItem('link'),
+		food: sessionStorage.getItem('yName'),
+		dateAdded: firebase.database.ServerValue.TIMESTAMP
+	})
+	console.log(user.uid);
+	var userRef = user.uid;
+	var postId = newPostRef.key;
+	console.log(postId);
+
+
+
+	database.ref(`users/${userRef}/${postId}`).on("value", function(snapshot){
+		var snap = snapshot.val();
+		console.log(snap);
+		$("#yourEventFrame").html(`
+		<a href="${snap.link}"><h3>${snap.event}<h3></a>
+		<h3>${snap.date} at ${snap.time}</h3>
+		<h3>${snap.food}</h3>
+		`)
+	}, function (errorObject) {
+		console.log("The read failed: " + errorObject.code);
+	});
+	
+	}})
