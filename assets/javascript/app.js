@@ -458,3 +458,9 @@ function mapIt() {
 		map.addControl(new mapboxgl.NavigationControl());
 	});
 }
+
+//-------------Function that makes modal buttons on homepage responsive for small screens------------------
+$( window ).resize(function() {
+  if($(window).width() <=600) $('#add-params').addClass("btn-block", "btn-sm").removeClass("btn-lg");
+  else $('#add-params').removeClass("btn-block", "btn-sm").addClass("btn-lg");
+});

@@ -22,10 +22,7 @@
 <div class="container-fluid">
 
     <body>
-            <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">
-        Sign up here!
-      </button>
+
       
       <!-- Modal -->
       <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModallLabel" aria-hidden="true">
@@ -58,10 +55,6 @@
         </div>
       </div>
 <!-- LOGIN -->
-                  <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal" id="logInBtn">
-        Log In
-      </button>
       
       <!-- Modal -->
       <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -92,9 +85,7 @@
         </div>
       </div>
     </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>
-            Log Out
-          </button>
+
           
           <!-- Modal -->
           <div class="modal fade" id="logOutModal" tabindex="-1" role="dialog" aria-labelledby="logOutModalLabel" aria-hidden="true">
@@ -199,8 +190,21 @@
         
     </div>
     <div class="row" id="home-Submit">
-        <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
+      <div class='col-md-5'></div>
+        <div class="col-md-2" id="user-login-interface">
+            <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">Sign up here!</button>
+            <!-- LOGIN -->
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#loginModal" id="logInBtn">Log In</button>
+            <!--LOGOUT BUTTON-->
+            <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>Log Out</button>
+         </div>
+        <div class='col-md-5'></div>
+
     </div>
+
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8" id="returned">
