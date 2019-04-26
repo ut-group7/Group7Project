@@ -1,106 +1,105 @@
 var config = {
-  apiKey: "AIzaSyDDxX6GASYnkjZK_ETcT02vI2HL4IaVYmo",
-  authDomain: "group7-e91b6.firebaseapp.com",
-  databaseURL: "https://group7-e91b6.firebaseio.com",
-  projectId: "group7-e91b6",
-  storageBucket: "group7-e91b6.appspot.com",
-  messagingSenderId: "427946972311"
+	apiKey: 'AIzaSyDDxX6GASYnkjZK_ETcT02vI2HL4IaVYmo',
+	authDomain: 'group7-e91b6.firebaseapp.com',
+	databaseURL: 'https://group7-e91b6.firebaseio.com',
+	projectId: 'group7-e91b6',
+	storageBucket: 'group7-e91b6.appspot.com',
+	messagingSenderId: '427946972311'
 };
 firebase.initializeApp(config);
 const database = firebase.database();
 var user = firebase.auth().currentUser;
+console.log(user);
 
 //===============================================================================================================
 // sign up new user
-$(document).on("click", "#signUp", function() {
-  event.preventDefault();
-  var data = {
-    email: $("#registerEmail").val(), //get the email from Form
-    password: $("#registerPassword").val() //get the pass from Form
-  };
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(data.email, data.password)
-    .then(function(user) {
-			$("#signUpSuccess").html(`
+$(document).on('click', '#signUp', function() {
+	event.preventDefault();
+	var data = {
+		email: $('#registerEmail').val(), //get the email from Form
+		password: $('#registerPassword').val() //get the pass from Form
+	};
+	firebase
+		.auth()
+		.createUserWithEmailAndPassword(data.email, data.password)
+		.then(function(user) {
+			$('#signUpSuccess').html(`
 			<p>You are now signed up!</p>
 			`);
-			console.log("Successfully created user account with uid:", user.uid);
-			$("#errorFrame").hide();
-    })
-    .catch(function(error) {
-			console.log("Error creating user:", error);
-			$("#errorFrame").html(`
+			console.log('Successfully created user account with uid:', user.uid);
+			$('#errorFrame').hide();
+		})
+		.catch(function(error) {
+			console.log('Error creating user:', error);
+			$('#errorFrame').html(`
 			<p>An error has occured, "${error.message}"</p>
-			`)
-    });
-  console.log(data);
+			`);
+		});
+	console.log(data);
 });
 //===================================================================================================================
 //login if already a user
 //===========================================================
-$(document).on("click", "#login", function(){
+$(document).on('click', '#login', function() {
 	event.preventDefault();
 	var data = {
-		email: $("#loginEmail").val(),
-		password: $("#loginPassword").val()
-};
-firebase
+		email: $('#loginEmail').val(),
+		password: $('#loginPassword').val()
+	};
+	firebase
 		.auth()
 		.signInWithEmailAndPassword(data.email, data.password)
-		.then(function(){
-				$("#loginSuccess").html(`
+		.then(function() {
+			$('#loginSuccess').html(`
 				<p>You have logged in</p>
-				`)
-				$("#loginFail").hide();
+				`);
+			$('#loginFail').hide();
 		})
-		.catch(function(err){
-				console.error(err);
-				$("#loginFail").html(`
+		.catch(function(err) {
+			console.error(err);
+			$('#loginFail').html(`
 				<p>An error has occured, "${err.message}"</p>
-				`)
+				`);
 		});
-		
-})
+});
 //===========================================================
 //================================
 //sign out
-$(document).on("click", "#logOutBtn", function(){
+$(document).on('click', '#logOutBtn', function() {
 	event.preventDefault();
-firebase
-.auth()
-.signOut()
-.then(function(){
-	console.log("sign out successful")
-	$("#logOutSuccess").text("You have been signed out");
-}).catch(function(error){
-	console.log("an error occured:", error)
-	})
+	firebase
+		.auth()
+		.signOut()
+		.then(function() {
+			console.log('sign out successful');
+			$('#logOutSuccess').text('You have been signed out');
+		})
+		.catch(function(error) {
+			console.log('an error occured:', error);
+		});
 });
 //================================
 // show appropriate buttons based on if user is logged in or not
-firebase.auth().onAuthStateChanged(function(user){
+firebase.auth().onAuthStateChanged(function(user) {
 	if (user) {
-		console.log("a user is signed in");
-		$("#signUpBtn").hide();
-				$("#logInBtn").hide();
-				$("#logOutBtn").show();
-				$("#eventBtn").show();
+		console.log('a user is signed in');
+		$('#signUpBtn').hide();
+		$('#logInBtn').hide();
+		$('#logOutBtn').show();
+		$('#eventBtn').show();
 	} else {
-		console.log("no user is signed in")
-		$("#signUpBtn").show();
-				$("#logInBtn").show();
-				$("#logOutBtn").hide();
-				$("#eventBtn").hide();
+		console.log('no user is signed in');
+		$('#signUpBtn').show();
+		$('#logInBtn').show();
+		$('#logOutBtn').hide();
+		$('#eventBtn').hide();
 	}
-})
+});
 
 //===================================================================
 
-var date = moment().format("YYYY-MM-DD");
-var end = moment()
-  .add(14, "days")
-  .format("YYYY-MM-DD");
+var date = moment().format('YYYY-MM-DD');
+var end = moment().add(14, 'days').format('YYYY-MM-DD');
 console.log(end);
 var count = 0;
 var page = 0;
@@ -110,41 +109,49 @@ var dollarSign;
 var food;
 var yPageCount = 1;
 
+//Makes the window load to the top of the page when you refresh it.
+$(document).ready(function() {
+	window.scrollTo(0, 0);
+});
+
 //Makes it so clicking Enter on the Yelp page doesn't refresh the page and start over.
 $(function() {
-  $("form").submit(function() { return false; });
+	$('form').submit(function() {
+		return false;
+	});
 });
 
 //Searches for Ticket Master Results
-$("#add-params").on("click", function() {
-  city = $("#city-input").val();
-  sessionStorage.setItem("city", city);
-  miles = $("#miles-input").val();
-  state = $("#select-state option:selected").attr("value");
-  var category = "";
-  category = $("#search-input").val();
-  var keyword = "";
-  if (category !== "") {
-    keyword = `&keyword=${category}`;
-  }
-  sessionStorage.setItem("state", state);
-  console.log(state);
-  var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}${keyword}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
-  console.log(queryURL);
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-    $(
-      "#instructions"
-    ).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
+$('#add-params').on('click', function() {
+	city = $('#city-input').val();
+	sessionStorage.setItem('city', city);
+	miles = $('#miles-input').val();
+	state = $('#select-state option:selected').attr('value');
+	var category = '';
+	category = $('#search-input').val();
+	var keyword = '';
+	if (category !== '') {
+		keyword = `&keyword=${category}`;
+	}
+	sessionStorage.setItem('state', state);
+	console.log(state);
+	var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}${keyword}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
+	console.log(queryURL);
+	$.ajax({
+		url: queryURL,
+		method: 'GET'
+	}).then(function(response) {
+		console.log(response);
+		$(
+			'#instructions'
+		).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
     <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").html(``);
-    $("#options").append(response._embedded.events.map(show));
-    $("#next").html(makePages(response.page.totalPages));
-    count = 0;
-  });
+		$('#options').html(``);
+		$('#options').append(response._embedded.events.map(show));
+		$('#next').html(makePages(response.page.totalPages));
+		$(document).scrollTop(400);
+		count = 0;
+	});
 });
 
 //Creates the pages buttons at the bottom of the Ticket Master results.
@@ -153,40 +160,41 @@ function makePages(p) {
 	for (var i = 0; i < p; i++) {
 		pages.push(`<span class="page" data-page="${i}"> ${i + 1}</span>`);
 	}
-  pages = "Pages:  " + pages.join();
-  return pages;
-
+	pages = 'Pages:  ' + pages.join();
+	return pages;
 }
 
 //Shows a new page when a page is clicked at the bottom of the Ticket Master results.
-$(document).on("click", ".page", function() {
-  page = $(this).attr("data-page");
-  console.log(this);
-  $("#options").html("");
-  var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
-  console.log(queryURL);
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-    $(
-      "#instructions"
-    ).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
+$(document).on('click', '.page', function() {
+	page = $(this).attr('data-page');
+	console.log(this);
+	$('#options').html('');
+	var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
+	console.log(queryURL);
+	$.ajax({
+		url: queryURL,
+		method: 'GET'
+	}).then(function(response) {
+		console.log(response);
+		$(
+			'#instructions'
+		).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
       <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").append(response._embedded.events.map(show));
-    count = 0;
-  });
+		$('#options').append(response._embedded.events.map(show));
+		$(document).scrollTop(400);
+		count = 0;
+	});
 });
 
 //Saves the info from the chosen Ticket Master option and displays the Yelp search.
 $(document).on('click', '.select', function() {
+	$(document).scrollTop(0);
 	sessionStorage.setItem('event', $(this).attr('event'));
 	sessionStorage.setItem('time', $(this).attr('time'));
 	sessionStorage.setItem('date', $(this).attr('date'));
 	sessionStorage.setItem('link', $(this).attr('link'));
-  sessionStorage.setItem('tmAddress', $(this).attr('address'));
-  $("#home-Submit").html(``);
+	sessionStorage.setItem('tmAddress', $(this).attr('address'));
+	$('#home-Submit').html(``);
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#next').html(``);
@@ -208,18 +216,18 @@ $(document).on('click', '.select', function() {
                 <button type="button" class="btn btn-primary btn-lg" id="new-params">Submit</button>
             </th>
     `);
-  $("#next").html("");
+	$('#next').html('');
 });
 
 //Displays and formats the Ticket Master search results.
 function show(r) {
 	var i = count;
-  var back = "";
-  if(i===0 || i%2===0){
-    back = "dark";
-  }else{
-    back = "light";
-  }
+	var back = '';
+	if (i === 0 || i % 2 === 0) {
+		back = 'dark';
+	} else {
+		back = 'light';
+	}
 	address =
 		r._embedded.venues[0].address.line1 +
 		', ' +
@@ -228,7 +236,7 @@ function show(r) {
 		r._embedded.venues[0].state.name;
 	var time = moment(r.dates.start.localTime, 'HH:mm').format('hh:mm a');
 	count++;
-  return `
+	return `
   <div class="row eachResult ${back}">
     <div class="col-md-6 info">
       <div class="d-flex flex-column info">
@@ -241,8 +249,8 @@ function show(r) {
       <div class="col-md-2"></div>
       <div class="col-md-4">
         <div class="p-2"><img alt="Venue Image" src="${r.images[0].url}"/></div>
-        <div class="p-2"><button type="button" class="btn btn-primary select" backColor="${back}" value="${i}" event="${r.name}" time="${time}" date="${r.dates.start
-          .localDate}" link="${r.url}" address="${address}">select</button></div>
+        <div class="p-2"><button type="button" class="btn btn-primary select" backColor="${back}" value="${i}" event="${r.name}" time="${time}" date="${r
+		.dates.start.localDate}" link="${r.url}" address="${address}">select</button></div>
       </div>
     </div> 
   </div>
@@ -285,17 +293,17 @@ $(document).on('click', '#new-params', function() {
 			} else {
 				dollarSign = dollarSign + ',' + dollars4;
 			}
-    }
-    if(dollarSign === ''){
-      return dollarSign;
-    }
-    dollarSign = "&price=" + dollarSign;
-    return dollarSign;
+		}
+		if (dollarSign === '') {
+			return dollarSign;
+		}
+		dollarSign = '&price=' + dollarSign;
+		return dollarSign;
 	}
 
 	var eventTime = sessionStorage.getItem('time');
 	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
-  console.log(yPageCount);
+	console.log(yPageCount);
 	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
 
 	$.ajax({
@@ -307,40 +315,39 @@ $(document).on('click', '#new-params', function() {
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
-
 			console.log(data);
 			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
-      $("#choices").html(``);
-      $("#choices").append(data.businesses.map(display));
-      $("#next").html(yelpPages(data));
-    }
-  });
+			$('#choices').html(``);
+			$('#choices').append(data.businesses.map(display));
+			$('#next').html(yelpPages(data));
+			$(document).scrollTop(400);
+		}
+	});
 });
 
 //Creates pages at the bottom of the Yelp results to view more results.
 function yelpPages(p) {
-  var pages = [];
- 
-  count = p.total / 10;
-  if(count>10){
-    count = 10;
-  }
-	for (var i = 0; i < count; i++) {
-    console.log((i*10)+1);
-		pages.push(`<span class="yPage" data-page="${(i*10)+1}"> ${i + 1}</span>`);
-	}
-  pages = "Pages:  " + pages.join();
-  return pages;
+	var pages = [];
 
+	count = p.total / 10;
+	if (count > 10) {
+		count = 10;
+	}
+	for (var i = 0; i < count; i++) {
+		console.log(i * 10 + 1);
+		pages.push(`<span class="yPage" data-page="${i * 10 + 1}"> ${i + 1}</span>`);
+	}
+	pages = 'Pages:  ' + pages.join();
+	return pages;
 }
 
 //Goes to the page of Yelp results selected.
-$(document).on("click", ".yPage", function(){
-  var eventTime = sessionStorage.getItem('time');
+$(document).on('click', '.yPage', function() {
+	var eventTime = sessionStorage.getItem('time');
 	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
-  yPageCount = $(this).attr("data-page");
-  console.log(yPageCount);
+	yPageCount = $(this).attr('data-page');
+	console.log(yPageCount);
 	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
 
 	$.ajax({
@@ -352,28 +359,28 @@ $(document).on("click", ".yPage", function(){
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
-
 			console.log(data);
 			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
-      $("#choices").html(``);
-      $("#choices").append(data.businesses.map(display));
-    }
-  });
+			$('#choices').html(``);
+			$('#choices').append(data.businesses.map(display));
+			$(document).scrollTop(400);
+		}
+	});
 });
 
-//Displays and formats the Yalp search results.
+//Displays and formats the Yelp search results.
 function display(r) {
-  var yAddress = r.location.display_address.join(" ");
-  var i = count;
-  var back = "";
-  count++;
-  if(i===0 || i%2===0){
-    back = "even";
-  }else{
-    back = "odd";
-  }
-  return `
+	var yAddress = r.location.display_address.join(' ');
+	var i = count;
+	var back = '';
+	count++;
+	if (i === 0 || i % 2 === 0) {
+		back = 'even';
+	} else {
+		back = 'odd';
+	}
+	return `
   <div class="row yResults ${back}">
     <div class="col-md-6 left">
       <div class="d-flex flex-column">
@@ -396,11 +403,13 @@ function display(r) {
 $(document).on('click', '.newSelect', function() {
 	sessionStorage.setItem('yAddress', $(this).attr('address'));
 	sessionStorage.setItem('yName', $(this).attr('name'));
+	$(document).scrollTop(400);
+	var user = firebase.auth().currentUser;
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
-  	$('#choices').html(``);
-  	$("#next").html(``);
+	$('#choices').html(``);
+	$('#next').html(``);
 	$('#results').html(`
     <h2>You are going to eat at ${$(this).attr('name')}.</h2>
     <h2>And then going to ${sessionStorage.getItem(
@@ -441,7 +450,7 @@ $(document).on('click', '.newSelect', function() {
 			userKeys.forEach(function(key) {
 				console.log(snap[key])
 				$("#yourEventFrame").append(`
-				<a href="${snap[key].link}"><h3>${snap[key].event}<h3></a>
+				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
 				<h3>${snap[key].date} at ${snap[key].time}</h3>
 				<h3>${snap[key].food}</h3>
 				`)
@@ -472,12 +481,19 @@ function mapIt() {
 	});
 	map.on('load', function() {
 		var directions = new MapboxDirections({
-			accessToken: mapboxgl.accessToken
+			accessToken: mapboxgl.accessToken,
+			// UI controls
+			controls: {
+				inputs: true,
+				instructions: false
+			}
 		});
-				// Paramaters that pass starting point and Destination
-				directions.setOrigin(startPoint);
-				directions.setDestination(destination);
-				//Add zoom and rotation control to the map.
-				map.addControl(directions, 'top-left');
-			});
-		};
+		map.addControl(directions, 'top-left');
+
+		// Paramaters that pass starting point and Destination
+		directions.setOrigin(startPoint);
+		directions.setDestination(destination);
+		// Add zoom and rotation controls to the map.
+		map.addControl(new mapboxgl.NavigationControl());
+	});
+}
