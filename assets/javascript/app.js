@@ -449,7 +449,7 @@ $(document).on('click', '.newSelect', function() {
 
 			var snap = snapshot.val();
 			console.log('snap', snap);
-
+			$("#yourEventFrame").html("");
 			var userKeys = Object.keys(snap);
 			console.log('userKeys', userKeys);
 			userKeys.forEach(function(key) {
@@ -458,6 +458,7 @@ $(document).on('click', '.newSelect', function() {
 				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
 				<h3>${snap[key].date} at ${snap[key].time}</h3>
 				<h3>${snap[key].food}</h3>
+				<hr>
 				`)
 			});
 			
