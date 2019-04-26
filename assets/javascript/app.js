@@ -28,6 +28,19 @@ $(document).on('click', '#signUp', function() {
 			`);
 			console.log('Successfully created user account with uid:', user.uid);
 			$('#errorFrame').hide();
+			var done;
+	done = sessionStorage.getItem('done');
+	if(done === 'done'){
+		var user = firebase.auth().currentUser;
+			database.ref('users/' + user.uid).push({
+			event: sessionStorage.getItem('event'),
+			time: sessionStorage.getItem('time'),
+			date: sessionStorage.getItem('date'),
+			link: sessionStorage.getItem('link'),
+			food: sessionStorage.getItem('yName'),
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		})
+	}
 		})
 		.catch(function(error) {
 			console.log('Error creating user:', error);
@@ -54,6 +67,19 @@ $(document).on('click', '#login', function() {
 				<p>You have logged in</p>
 				`);
 			$('#loginFail').hide();
+			var done;
+	done = sessionStorage.getItem('done');
+	if(done === 'done'){
+		var user = firebase.auth().currentUser;
+			database.ref('users/' + user.uid).push({
+			event: sessionStorage.getItem('event'),
+			time: sessionStorage.getItem('time'),
+			date: sessionStorage.getItem('date'),
+			link: sessionStorage.getItem('link'),
+			food: sessionStorage.getItem('yName'),
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		})
+	}
 		})
 		.catch(function(err) {
 			console.error(err);
@@ -124,6 +150,13 @@ $(function() {
 
 //Searches for Ticket Master Results
 $('#add-params').on('click', function() {
+	$('#home-Submit').html(`
+	<div class='col-md-5'></div>
+    <div class="col-md-2" id="user-login-interface">
+      <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
+    </div>
+  <div class='col-md-5'></div>
+	`);
 	city = $('#city-input').val();
 	sessionStorage.setItem('city', city);
 	miles = $('#miles-input').val();
@@ -405,10 +438,37 @@ function display(r) {
 
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
+	sessionStorage.setItem('done', 'done');
 	sessionStorage.setItem('yAddress', $(this).attr('address'));
 	sessionStorage.setItem('yName', $(this).attr('name'));
 	$(document).scrollTop(400);
 	var user = firebase.auth().currentUser;
+	$('#home-Submit').html(`
+	<div class='col-md-5'></div>
+    <div class="col-md-2" id="user-login-interface">
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">Sign up here!</button>
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#loginModal" id="logInBtn">Log In</button>
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>Log Out</button>
+    </div>
+  <div class='col-md-5'></div>
+	`);
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			console.log('a user is signed in');
+			$('#signUpBtn').hide();
+			$('#logInBtn').hide();
+			$('#logOutBtn').show();
+			$('#eventBtn').show();
+		} else {
+			console.log('no user is signed in');
+			$('#signUpBtn').show();
+			$('#logInBtn').show();
+			$('#logOutBtn').hide();
+			$('#eventBtn').hide();
+			$('#instructions').html(`<p>If you log in you can view your itineraries anytime you revisit</p>
+			<h4>Date Night Planner</h4>`);
+		}
+	});
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
