@@ -106,6 +106,7 @@ var address;
 var dollarSign;
 var food;
 var yPageCount = 1;
+$("#results").html("");
 
 //Makes the window load to the top of the page when you refresh it.
 $(document).ready(function() {
@@ -410,9 +411,10 @@ $(document).on('click', '.newSelect', function() {
 	$('#find').html(``);
 	$('#choices').html(``);
 	$('#next').html(``);
+	document.getElementById("results").style.backgroundColor = "rgba(66, 66, 66, .7)";
 	$('#results').html(`
-    <h2>You are going to eat at ${$(this).attr('name')},</h2>
-    <h2>and then going to ${sessionStorage.getItem(
+    <h2 >You are going to eat at ${$(this).attr('name')},</h2>
+    <h2 >and then going to ${sessionStorage.getItem(
 		'event'
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
