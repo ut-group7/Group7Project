@@ -317,8 +317,8 @@ $(document).on('click', '#new-params', function() {
 		dataType: 'json',
 		success: function(data) {
 			console.log(data);
-			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
-          <p>And then select the one you want to go to.</p>`);
+			$('#instructions').html(`<p>Browse the list of restaurants in your area,</p>
+          <p>and then select the one you want to go to.</p>`);
       $("#choices").html(``);
       $("#choices").append(data.businesses.map(display));
       $("#next").html(yelpPages(data));
@@ -362,8 +362,8 @@ $(document).on('click', '.yPage', function() {
 		dataType: 'json',
 		success: function(data) {
 			console.log(data);
-			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
-          <p>And then select the one you want to go to.</p>`);
+			$('#instructions').html(`<p>Browse the list of restaurants in your area,</p>
+          <p>and then select the one you want to go to.</p>`);
       $("#choices").html(``);
       $("#choices").append(data.businesses.map(display));
       $(document).scrollTop(400);
@@ -402,6 +402,7 @@ function display(r) {
     `;
 }
 
+
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
   $(document).scrollTop(400);
@@ -413,12 +414,13 @@ $(document).on('click', '.newSelect', function() {
 	$('#choices').html(``);
 	$('#next').html(``);
 	$('#results').html(`
-    <h2>You are going to eat at ${$(this).attr('name')}.</h2>
-    <h2>And then going to ${sessionStorage.getItem(
+    <h2>You are going to eat at ${$(this).attr('name')},</h2>
+    <h2>and then going to ${sessionStorage.getItem(
 		'event'
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
+
 
 	/*---------------Code for login temporarily quoted out to keep app functional------------*/
 
