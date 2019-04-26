@@ -476,7 +476,7 @@ function mapIt() {
 	var map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [ -79.4512, 43.6568 ],
+		center: [ -97.73675, 30.28608 ],
 		zoom: 13
 	});
 	map.on('load', function() {
