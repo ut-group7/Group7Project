@@ -108,6 +108,7 @@ var address;
 var dollarSign;
 var food;
 var yPageCount = 1;
+$("#results").html("");
 
 //Makes the window load to the top of the page when you refresh it.
 $(document).ready(function() {
@@ -316,14 +317,15 @@ $(document).on('click', '#new-params', function() {
 		dataType: 'json',
 		success: function(data) {
 			console.log(data);
-			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
-          <p>And then select the one you want to go to.</p>`);
-			$('#choices').html(``);
-			$('#choices').append(data.businesses.map(display));
-			$('#next').html(yelpPages(data));
-			$(document).scrollTop(400);
-		}
-	});
+			$('#instructions').html(`<p>Browse the list of restaurants in your area,</p>
+          <p>and then select the one you want to go to.</p>`);
+      $("#choices").html(``);
+      $("#choices").append(data.businesses.map(display));
+      $("#next").html(yelpPages(data));
+      $(document).scrollTop(400);
+    }
+  });
+
 });
 
 //Creates pages at the bottom of the Yelp results to view more results.
@@ -360,13 +362,14 @@ $(document).on('click', '.yPage', function() {
 		dataType: 'json',
 		success: function(data) {
 			console.log(data);
-			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
-          <p>And then select the one you want to go to.</p>`);
-			$('#choices').html(``);
-			$('#choices').append(data.businesses.map(display));
-			$(document).scrollTop(400);
-		}
-	});
+			$('#instructions').html(`<p>Browse the list of restaurants in your area,</p>
+          <p>and then select the one you want to go to.</p>`);
+      $("#choices").html(``);
+      $("#choices").append(data.businesses.map(display));
+      $(document).scrollTop(400);
+    }
+  });
+
 });
 
 //Displays and formats the Yelp search results.
@@ -399,6 +402,7 @@ function display(r) {
 		`;
 }
 
+
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
 	sessionStorage.setItem('yAddress', $(this).attr('address'));
@@ -410,9 +414,10 @@ $(document).on('click', '.newSelect', function() {
 	$('#find').html(``);
 	$('#choices').html(``);
 	$('#next').html(``);
+	document.getElementById("results").style.backgroundColor = "rgba(66, 66, 66, .7)";
 	$('#results').html(`
-    <h2>You are going to eat at ${$(this).attr('name')}.</h2>
-    <h2>And then going to ${sessionStorage.getItem(
+    <h2 >You are going to eat at ${$(this).attr('name')},</h2>
+    <h2 >and then going to ${sessionStorage.getItem(
 		'event'
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
