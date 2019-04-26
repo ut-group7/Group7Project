@@ -535,6 +535,7 @@ $(document).on("click", "#eventBtn", function() {
 				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
 				<h3>${snap[key].date} at ${snap[key].time}</h3>
 				<h3>${snap[key].food}</h3>
+				<div><i class="fas fa-trash" value="${key}"></i></div>
 				<hr>
 				`);
         });
@@ -548,6 +549,28 @@ $(document).on("click", "#eventBtn", function() {
 //clears the modal so it will not append multiple times
 $(document).on("click", "#closeOne", "#closeTwo", function() {
   $("#yourEventFrame").empty();
+});
+
+
+$(document).on("click", ".fa-trash", function(){
+	var user = firebase.auth().currentUser;
+	var userRef = user.uid;
+	var key = $(this).attr("value");
+	database.ref("users/" + user.uid + "/" + key).remove();
+	database.ref(`users/${userRef}`).on("value", function(snapshot){
+		var snap = snapshot.val();
+		var userKeys = Object.keys(snap);
+		$("#yourEventFrame").html(``);
+		userKeys.forEach(function(key) {
+			$("#yourEventFrame").append(`
+				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
+				<h3>${snap[key].date} at ${snap[key].time}</h3>
+				<h3>${snap[key].food}</h3>
+				<i class="fas fa-trash" value="${key}"></i>
+				<hr>
+				`);
+			});
+	});
 });
 
 function mapIt() {
