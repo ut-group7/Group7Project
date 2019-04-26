@@ -452,6 +452,7 @@ $(document).on('click', '.newSelect', function() {
 
 			var userKeys = Object.keys(snap);
 			console.log('userKeys', userKeys);
+			$("#yourEventFrame").html("");
 			userKeys.forEach(function(key) {
 				console.log(snap[key])
 				$("#yourEventFrame").append(`
@@ -466,10 +467,14 @@ $(document).on('click', '.newSelect', function() {
 		});
 	}
 });
-//clears the modal so it will not append multiple times
-$(document).on("click", "#closeOne", "#closeTwo", function(){
-	$("#yourEventFrame").empty();
-});
+
+function showItin(snap){
+	return `
+	<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
+	<h3>${snap[key].date} at ${snap[key].time}</h3>
+	<h3>${snap[key].food}</h3>
+	`;
+}
 
 function mapIt() {
 	var startPoint = sessionStorage.getItem('city') + ',' + sessionStorage.getItem('state');
