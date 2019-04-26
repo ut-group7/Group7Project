@@ -9,6 +9,7 @@ var config = {
 firebase.initializeApp(config);
 const database = firebase.database();
 var user = firebase.auth().currentUser;
+
 //===============================================================================================================
 // sign up new user
 $(document).on("click", "#signUp", function() {
@@ -105,7 +106,16 @@ var count = 0;
 var page = 0;
 var miles;
 var address;
+var dollarSign;
+var food;
+var yPageCount = 1;
 
+//Makes it so clicking Enter on the Yelp page doesn't refresh the page and start over.
+$(function() {
+  $("form").submit(function() { return false; });
+});
+
+//Searches for Ticket Master Results
 $("#add-params").on("click", function() {
   city = $("#city-input").val();
   sessionStorage.setItem("city", city);
@@ -137,6 +147,7 @@ $("#add-params").on("click", function() {
   });
 });
 
+//Creates the pages buttons at the bottom of the Ticket Master results.
 function makePages(p) {
 	var pages = [];
 	for (var i = 0; i < p; i++) {
@@ -147,25 +158,28 @@ function makePages(p) {
 
 }
 
-
-$(document).on("click", ".page", function(){
+//Shows a new page when a page is clicked at the bottom of the Ticket Master results.
+$(document).on("click", ".page", function() {
   page = $(this).attr("data-page");
   console.log(this);
   $("#options").html("");
   var queryURL = `https://app.ticketmaster.com/discovery/v2/events.json?city=${city}&stateCode=${state}&startDateTime=${date}T14:00:00Z&endDateTime=${end}T14:00:00Z&radius=${miles}&unit=miles&size=10&page=${page}&apikey=VVhqdJgL8bOLqDeCOvQzEaDiHBKw5xvC`;
   console.log(queryURL);
   $.ajax({
-      url: queryURL,
-      method: "GET"
-    }).then(function(response) {
-        console.log(response);
-      $("#instructions").html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
+    url: queryURL,
+    method: "GET"
+  }).then(function(response) {
+    console.log(response);
+    $(
+      "#instructions"
+    ).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
       <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-      $("#options").append(response._embedded.events.map(show));
-      count = 0;
-    });
+    $("#options").append(response._embedded.events.map(show));
+    count = 0;
   });
+});
 
+//Saves the info from the chosen Ticket Master option and displays the Yelp search.
 $(document).on('click', '.select', function() {
 	sessionStorage.setItem('event', $(this).attr('event'));
 	sessionStorage.setItem('time', $(this).attr('time'));
@@ -197,6 +211,7 @@ $(document).on('click', '.select', function() {
   $("#next").html("");
 });
 
+//Displays and formats the Ticket Master search results.
 function show(r) {
 	var i = count;
   var back = "";
@@ -234,15 +249,16 @@ function show(r) {
   `;
 }
 
+//Searches for the Yelp results using the parameters entered.
 $(document).on('click', '#new-params', function() {
-	var food = $('#food-input').val();
+	food = $('#food-input').val();
 	var city = sessionStorage.getItem('city');
 
 	var dollars = $("input[name='price']:checked").val();
 	var dollars2 = $("input[name='price2']:checked").val();
 	var dollars3 = $("input[name='price3']:checked").val();
 	var dollars4 = $("input[name='price4']:checked").val();
-	var dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
+	dollarSign = isChecked(dollars, dollars2, dollars3, dollars4);
 
 	function isChecked(dollars, dollars2, dollars3, dollars4) {
 		var dollarSign = '';
@@ -279,8 +295,8 @@ $(document).on('click', '#new-params', function() {
 
 	var eventTime = sessionStorage.getItem('time');
 	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
-
-	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}`;
+  console.log(yPageCount);
+	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
 
 	$.ajax({
 		url: newURL,
@@ -291,6 +307,52 @@ $(document).on('click', '#new-params', function() {
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
+
+			console.log(data);
+			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
+          <p>And then select the one you want to go to.</p>`);
+      $("#choices").html(``);
+      $("#choices").append(data.businesses.map(display));
+      $("#next").html(yelpPages(data));
+    }
+  });
+});
+
+//Creates pages at the bottom of the Yelp results to view more results.
+function yelpPages(p) {
+  var pages = [];
+ 
+  count = p.total / 10;
+  if(count>10){
+    count = 10;
+  }
+	for (var i = 0; i < count; i++) {
+    console.log((i*10)+1);
+		pages.push(`<span class="yPage" data-page="${(i*10)+1}"> ${i + 1}</span>`);
+	}
+  pages = "Pages:  " + pages.join();
+  return pages;
+
+}
+
+//Goes to the page of Yelp results selected.
+$(document).on("click", ".yPage", function(){
+  var eventTime = sessionStorage.getItem('time');
+	var isOpen = moment(eventTime, 'hh:mm a').subtract(3, 'hours').format('X');
+  yPageCount = $(this).attr("data-page");
+  console.log(yPageCount);
+	var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
+
+	$.ajax({
+		url: newURL,
+		headers: {
+			Authorization:
+				'Bearer 1CVYoXqsRViH_HtqoMSa7s5kkNBOA8qLuUeqLM2TAaekisIeSLsahjgzH7hcRCbXF7ltlBapaeEBqTm8ojpZB9xPcCuiyUzjMQw9NaxwlPrkF_QJZQgQiFmSsnu2XHYx'
+		},
+		method: 'GET',
+		dataType: 'json',
+		success: function(data) {
+
 			console.log(data);
 			$('#instructions').html(`<p>Browse the list of restaurants in your area.</p>
           <p>And then select the one you want to go to.</p>`);
@@ -300,6 +362,7 @@ $(document).on('click', '#new-params', function() {
   });
 });
 
+//Displays and formats the Yalp search results.
 function display(r) {
   var yAddress = r.location.display_address.join(" ");
   var i = count;
@@ -329,28 +392,75 @@ function display(r) {
 		`;
 }
 
+//Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
-	var user = firebase.auth().currentUser;
 	sessionStorage.setItem('yAddress', $(this).attr('address'));
 	sessionStorage.setItem('yName', $(this).attr('name'));
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
-	$('#choices').html(``);
+  	$('#choices').html(``);
+  	$("#next").html(``);
 	$('#results').html(`
-    <h1>You are going to eat at ${$(this).attr('name')}.</h1>
-    <h1>And then going to ${sessionStorage.getItem(
+    <h2>You are going to eat at ${$(this).attr('name')}.</h2>
+    <h2>And then going to ${sessionStorage.getItem(
 		'event'
-	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h1>
+	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
-		
-	// calls mapbox to map location selected
+		var user = firebase.auth().currentUser;
+		if (user) {
+			database.ref('users/' + user.uid).push({
+			event: sessionStorage.getItem('event'),
+			time: sessionStorage.getItem('time'),
+			date: sessionStorage.getItem('date'),
+			link: sessionStorage.getItem('link'),
+			food: sessionStorage.getItem('yName'),
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		})
+	}
 	mapIt();
+})
+
+	$(document).on("click", "#eventBtn", function(){
+		var user = firebase.auth().currentUser;
+		if (user) {
+		console.log(user.uid);
+		var userRef = user.uid;
+
+		
+		database.ref(`users/${userRef}`).on("value", function(snapshot){
+			var key = snapshot.key;
+			console.log('key', key);
+
+			var snap = snapshot.val();
+			console.log('snap', snap);
+
+			var userKeys = Object.keys(snap);
+			console.log('userKeys', userKeys);
+			userKeys.forEach(function(key) {
+				console.log(snap[key])
+				$("#yourEventFrame").append(`
+				<a href="${snap[key].link}"><h3>${snap[key].event}<h3></a>
+				<h3>${snap[key].date} at ${snap[key].time}</h3>
+				<h3>${snap[key].food}</h3>
+				`)
+			});
+			
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject.code);
+		});
+	}
+});
+//clears the modal so it will not append multiple times
+$(document).on("click", "#closeOne", "#closeTwo", function(){
+	$("#yourEventFrame").empty();
 });
 
 function mapIt() {
-	var destination = sessionStorage.getItem('tmAddress');
+	var startPoint = sessionStorage.getItem('city') + ',' + sessionStorage.getItem('state');
+	console.log('startPoint' + startPoint);
+	var destination = sessionStorage.getItem('yAddress');
 	var city = sessionStorage.getItem('city');
 	console.log('destination ' + destination);
 	mapboxgl.accessToken = 'pk.eyJ1IjoiZnJlZDFuIiwiYSI6ImNqdW5ibmkyMjBpMnc0MHBuZXlxc3dkcHgifQ.O_czpPEJoyLfkymB0dicCQ';
@@ -364,38 +474,10 @@ function mapIt() {
 		var directions = new MapboxDirections({
 			accessToken: mapboxgl.accessToken
 		});
-		map.addControl(directions, 'top-left');
-	})
-}
-
-$(document).on("click", "#eventBtn", function(){
-	var user = firebase.auth().currentUser;
-	if (user) {
-	var newPostRef = 	database.ref('users/' + user.uid).push({
-		event: sessionStorage.getItem('event'),
-		time: sessionStorage.getItem('time'),
-		date: sessionStorage.getItem('date'),
-		link: sessionStorage.getItem('link'),
-		food: sessionStorage.getItem('yName'),
-		dateAdded: firebase.database.ServerValue.TIMESTAMP
-	})
-	console.log(user.uid);
-	var userRef = user.uid;
-	var postId = newPostRef.key;
-	console.log(postId);
-
-
-																	//${postId}
-	database.ref(`users/${userRef}`).on("value", function(snapshot){
-		var snap = snapshot.val();
-		console.log(snap);
-		$("#yourEventFrame").html(`
-		<a href="${snap.link}"><h3>${snap.event}<h3></a>
-		<h3>${snap.date} at ${snap.time}</h3>
-		<h3>${snap.food}</h3>
-		`)
-	}, function (errorObject) {
-		console.log("The read failed: " + errorObject.code);
-	});
-	
-	}})
+				// Paramaters that pass starting point and Destination
+				directions.setOrigin(startPoint);
+				directions.setDestination(destination);
+				//Add zoom and rotation control to the map.
+				map.addControl(directions, 'top-left');
+			});
+		};
