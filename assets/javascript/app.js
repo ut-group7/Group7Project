@@ -86,11 +86,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 		$('#signUpBtn').hide();
 		$('#logInBtn').hide();
 		$('#logOutBtn').show();
+		$('#eventBtn').show();
 	} else {
 		console.log('no user is signed in');
 		$('#signUpBtn').show();
 		$('#logInBtn').show();
 		$('#logOutBtn').hide();
+		$('#eventBtn').hide();
 	}
 });
 
@@ -397,15 +399,16 @@ function display(r) {
       <div class="p-2"><button type="button" class="btn btn-primary newSelect" value="${i}" name="${r.name}" address="${yAddress}">select</button></div>
     </div>
   </div>  
-    `;
+		`;
 }
 
 
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
+	sessionStorage.setItem('yAddress', $(this).attr('address'));
+	sessionStorage.setItem('yName', $(this).attr('name'));
 	$(document).scrollTop(400);
 	var user = firebase.auth().currentUser;
-	sessionStorage.setItem('yAddress', $(this).attr('address'));
 	$('#options').html(``);
 	$('#instructions').html(``);
 	$('#find').html(``);
@@ -419,18 +422,53 @@ $(document).on('click', '.newSelect', function() {
 	)} at ${sessionStorage.getItem('time')} on ${sessionStorage.getItem('date')}</h2>
     <a href="${sessionStorage.getItem('link')}" target="_blank">Purchase Tickets</a>
 		`);
-
-
-	/*---------------Code for login temporarily quoted out to keep app functional------------*/
-
-	//var newPostRef = database.ref('users/' + user.uid).push({
-	//event: sessionStorage.getItem('event')
-	//});
-	//console.log(user.uid);
-	//var postId = newPostRef.key;
-	//console.log(postId);
-	// calls mapbox to map location selected
+		var user = firebase.auth().currentUser;
+		if (user) {
+			database.ref('users/' + user.uid).push({
+			event: sessionStorage.getItem('event'),
+			time: sessionStorage.getItem('time'),
+			date: sessionStorage.getItem('date'),
+			link: sessionStorage.getItem('link'),
+			food: sessionStorage.getItem('yName'),
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		})
+	}
 	mapIt();
+})
+
+	$(document).on("click", "#eventBtn", function(){
+		var user = firebase.auth().currentUser;
+		if (user) {
+		console.log(user.uid);
+		var userRef = user.uid;
+
+		
+		database.ref(`users/${userRef}`).on("value", function(snapshot){
+			var key = snapshot.key;
+			console.log('key', key);
+
+			var snap = snapshot.val();
+			console.log('snap', snap);
+
+			var userKeys = Object.keys(snap);
+			console.log('userKeys', userKeys);
+			userKeys.forEach(function(key) {
+				console.log(snap[key])
+				$("#yourEventFrame").append(`
+				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
+				<h3>${snap[key].date} at ${snap[key].time}</h3>
+				<h3>${snap[key].food}</h3>
+				`)
+			});
+			
+		}, function (errorObject) {
+			console.log("The read failed: " + errorObject.code);
+		});
+	}
+});
+//clears the modal so it will not append multiple times
+$(document).on("click", "#closeOne", "#closeTwo", function(){
+	$("#yourEventFrame").empty();
 });
 
 function mapIt() {
@@ -443,7 +481,7 @@ function mapIt() {
 	var map = new mapboxgl.Map({
 		container: 'map',
 		style: 'mapbox://styles/mapbox/streets-v11',
-		center: [ -79.4512, 43.6568 ],
+		center: [ -97.73675, 30.28608 ],
 		zoom: 13
 	});
 	map.on('load', function() {
