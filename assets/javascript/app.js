@@ -108,10 +108,9 @@ var food;
 var yPageCount = 1;
 
 //Makes the window load to the top of the page when you refresh it.
-$( document ).ready(function() {
-  window.scrollTo(0, 0);
+$(document).ready(function() {
+	window.scrollTo(0, 0);
 });
-
 
 //Makes it so clicking Enter on the Yelp page doesn't refresh the page and start over.
 $(function() {
@@ -145,13 +144,12 @@ $('#add-params').on('click', function() {
 			'#instructions'
 		).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
     <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").html(``);
-    $("#options").append(response._embedded.events.map(show));
-    $("#next").html(makePages(response.page.totalPages));
-    $(document).scrollTop(400);
-    count = 0;
-  });
-
+		$('#options').html(``);
+		$('#options').append(response._embedded.events.map(show));
+		$('#next').html(makePages(response.page.totalPages));
+		$(document).scrollTop(400);
+		count = 0;
+	});
 });
 
 //Creates the pages buttons at the bottom of the Ticket Master results.
@@ -180,16 +178,15 @@ $(document).on('click', '.page', function() {
 			'#instructions'
 		).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
       <p>You can click the "Link to Details" to view in TicketMaster more details on it.</p>`);
-    $("#options").append(response._embedded.events.map(show));
-    $(document).scrollTop(400);
-    count = 0;
-  });
-
+		$('#options').append(response._embedded.events.map(show));
+		$(document).scrollTop(400);
+		count = 0;
+	});
 });
 
 //Saves the info from the chosen Ticket Master option and displays the Yelp search.
 $(document).on('click', '.select', function() {
-  $(document).scrollTop(0);
+	$(document).scrollTop(0);
 	sessionStorage.setItem('event', $(this).attr('event'));
 	sessionStorage.setItem('time', $(this).attr('time'));
 	sessionStorage.setItem('date', $(this).attr('date'));
@@ -405,7 +402,7 @@ function display(r) {
 
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on('click', '.newSelect', function() {
-  $(document).scrollTop(400);
+	$(document).scrollTop(400);
 	var user = firebase.auth().currentUser;
 	sessionStorage.setItem('yAddress', $(this).attr('address'));
 	$('#options').html(``);
@@ -449,7 +446,12 @@ function mapIt() {
 	});
 	map.on('load', function() {
 		var directions = new MapboxDirections({
-			accessToken: mapboxgl.accessToken
+			accessToken: mapboxgl.accessToken,
+			// UI controls
+			controls: {
+				inputs: true,
+				instructions: false
+			}
 		});
 		map.addControl(directions, 'top-left');
 
