@@ -575,9 +575,7 @@ $(document).on("click", ".fa-trash", function(){
 });
 
 function mapIt() {
-  var startPoint =
-    sessionStorage.getItem("city") + "," + sessionStorage.getItem("state");
-  console.log("startPoint" + startPoint);
+	var startPoint = sessionStorage.getItem("tmAddress");
   var destination = sessionStorage.getItem("yAddress");
   var city = sessionStorage.getItem("city");
   console.log("destination " + destination);
