@@ -157,7 +157,7 @@ $(function() {
 });
 
 //Searches for Ticket Master Results
-$("#add-params").on("click", function() {
+$(document).on("click", "#add-params", function() {
   $("#home-Submit").html(`
 	<div class='col-md-5'></div>
     <div class="col-md-2" id="user-login-interface">
@@ -477,13 +477,13 @@ $(document).on("click", ".newSelect", function() {
       $("#signUpBtn").hide();
       $("#logInBtn").hide();
       $("#logOutBtn").show();
-      $("#eventBtn").show();
+			$("#eventBtn").show();
     } else {
       console.log("no user is signed in");
       $("#signUpBtn").show();
       $("#logInBtn").show();
       $("#logOutBtn").hide();
-      $("#eventBtn").hide();
+			$("#eventBtn").hide();
       $("#instructions")
         .html(`<p>If you log in you can view your itineraries anytime you revisit</p>
 			<h4>Date Night Planner</h4>`);
@@ -493,7 +493,8 @@ $(document).on("click", ".newSelect", function() {
   $("#instructions").html(``);
   $("#find").html(``);
   $("#choices").html(``);
-  $("#next").html(``);
+	$("#next").html(``);
+	$("#restart").html(`<button type="button" class="btn btn-primary btn-lg" id="again">Try Again?</button>`);
   document.getElementById("results").style.backgroundColor =
     "rgba(66, 66, 66, .7)";
   $("#results").html(`
@@ -617,4 +618,9 @@ $(window).resize(function() {
     $("#add-params")
       .removeClass("btn-block", "btn-sm")
       .addClass("btn-lg");
+});
+
+//Refresh the page to try again.
+$(document).on("click", "#again", function(){
+	location.reload(true);
 });
