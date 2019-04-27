@@ -18,6 +18,7 @@
     <!-- Points CSS file. -->
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css">
     <link rel="icon" type="image/png" href="assets/images/d.png" sizes="32x32" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <div class="container-fluid">
 
@@ -39,17 +40,20 @@
                             <label for="name-input">Email Address</label>
                             <input class="form-control" id="registerEmail" type="text">
                             <br/>
+                    </div>
+                    <div class="form-group">
                             <label for="password-input">Password</label>
                             <input class="form-control" id="registerPassword" type="password">
                             <br/>
-                        </div> 
+                          </div>
+                        
                         <span id="signUpSuccess"></span>
                         <span id="errorFrame"></span>
             </div>
             <div class="modal-footer">
                     <button type="submit" id="signUp" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No thanks (continue without creating an account)</button>
-              
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" id="noBtn">No thanks (continue without creating an account)</button>
+            </div> 
             </div>
           </div>
         </div>
@@ -71,17 +75,21 @@
                             <label for="name-input">Email Address</label>
                             <input class="form-control" id="loginEmail" type="text">
                             <br/>
+                    </div>
+                    <div class="form-group">
                             <label for="password-input">Password</label>
                             <input class="form-control" id="loginPassword" type="password">
                             <br/>
                         </div> 
                         <span id="loginSuccess"></span>
                         <span id="loginFail"></span>
-            </div>
+                      </div>
+            
             <div class="modal-footer">
                     <button type="submit" id="login" class="btn btn-primary">Login</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
+          </div>
         </div>
       </div>
     </div>
@@ -214,6 +222,11 @@
         </form>
         
     </div>
+    <div class="row">
+        <div class="col text-center">
+          <div id="restart"></div>
+        </div>
+      </div>
     <div class="row" id="home-Submit">
       <div class='col-md-5'></div>
         <div class="col-md-2" id="user-login-interface">

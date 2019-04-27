@@ -28,6 +28,23 @@ $(document).on("click", "#signUp", function() {
 			`);
       console.log("Successfully created user account with uid:", user.uid);
       $("#errorFrame").hide();
+      $("#registerEmail").val("");
+      $("#registerPassword").val("");
+      $("#noBtn").hide();
+      $("#signUp").hide();
+      var done;
+      done = sessionStorage.getItem("done");
+      if (done === "done") {
+        var user = firebase.auth().currentUser;
+        database.ref("users/" + user.uid).push({
+          event: sessionStorage.getItem("event"),
+          time: sessionStorage.getItem("time"),
+          date: sessionStorage.getItem("date"),
+          link: sessionStorage.getItem("link"),
+          food: sessionStorage.getItem("yName"),
+          dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
     })
     .catch(function(error) {
       console.log("Error creating user:", error);
@@ -35,7 +52,6 @@ $(document).on("click", "#signUp", function() {
 			<p>An error has occured, "${error.message}"</p>
 			`);
     });
-  console.log(data);
 });
 //===================================================================================================================
 //login if already a user
@@ -54,6 +70,22 @@ $(document).on("click", "#login", function() {
 				<p>You have logged in</p>
 				`);
       $("#loginFail").hide();
+      $("#loginEmail").val("");
+      $("#loginPassword").val("");
+      $("#login").hide();
+      var done;
+      done = sessionStorage.getItem("done");
+      if (done === "done") {
+        var user = firebase.auth().currentUser;
+        database.ref("users/" + user.uid).push({
+          event: sessionStorage.getItem("event"),
+          time: sessionStorage.getItem("time"),
+          date: sessionStorage.getItem("date"),
+          link: sessionStorage.getItem("link"),
+          food: sessionStorage.getItem("yName"),
+          dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
     })
     .catch(function(err) {
       console.error(err);
@@ -125,7 +157,14 @@ $(function() {
 });
 
 //Searches for Ticket Master Results
-$("#add-params").on("click", function() {
+$(document).on("click", "#add-params", function() {
+  $("#home-Submit").html(`
+	<div class='col-md-5'></div>
+    <div class="col-md-2" id="user-login-interface">
+      <button type="button" class="btn btn-primary btn-lg" id="add-params">Submit</button>
+    </div>
+  <div class='col-md-5'></div>
+	`);
   city = $("#city-input").val();
   sessionStorage.setItem("city", city);
   miles = $("#miles-input").val();
@@ -145,7 +184,6 @@ $("#add-params").on("click", function() {
     method: "GET"
   }).then(function(response) {
     console.log(response);
-    $("#home-Submit").html(``);
     $(
       "#instructions"
     ).html(`<p>Browse the list of events over the next 2 weeks below and click the "Select" button next to your choice.</p>
@@ -270,7 +308,6 @@ function show(r) {
 $(document).on("click", "#new-params", function() {
   food = $("#food-input").val();
   var city = sessionStorage.getItem("city");
-
   var dollars = $("input[name='price']:checked").val();
   var dollars2 = $("input[name='price2']:checked").val();
   var dollars3 = $("input[name='price3']:checked").val();
@@ -363,7 +400,6 @@ $(document).on("click", ".yPage", function() {
     .subtract(3, "hours")
     .format("X");
   yPageCount = $(this).attr("data-page");
-  console.log(yPageCount);
   var newURL = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?term=${food}&location=${city}${dollarSign}&limit=10&open_at=${isOpen}&offset=${yPageCount}`;
 
   $.ajax({
@@ -375,10 +411,9 @@ $(document).on("click", ".yPage", function() {
     method: "GET",
     dataType: "json",
     success: function(data) {
-      console.log(data);
       $("#instructions")
         .html(`<p>Browse the list of restaurants in your area,</p>
-          <p>and then select the one you want to go to.</p>`);
+           <p>and then select the one you want to go to.</p>`);
       $("#choices").html(``);
       $("#choices").append(data.businesses.map(display));
       $(document).scrollTop(400);
@@ -422,42 +457,46 @@ function display(r) {
 
 //Displays your itinerary when you have selected your Yelp choice.
 $(document).on("click", ".newSelect", function() {
+  sessionStorage.setItem("done", "done");
   sessionStorage.setItem("yAddress", $(this).attr("address"));
   sessionStorage.setItem("yName", $(this).attr("name"));
   $(document).scrollTop(400);
   var user = firebase.auth().currentUser;
-  $("#options").html(``);
-  $("#instructions").html(``);
-  $("#find").html(``);
-  $("#choices").html(``);
-  $("#next").html(``);
-  document.getElementById("results").style.backgroundColor =
-    "rgba(66, 66, 66, .7)";
-  $("#home-Submit.row").html(`      
-    <div class='col-md-5'></div>
-      <div class="col-md-2" id="user-login-interface">
-        <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">Sign up here!</button>
-        <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#loginModal" id="logInBtn">Log In</button>
-        <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>Log Out</button>
-     </div>
-    <div class='col-md-5'></div>`);
-
+  $("#home-Submit").html(`
+	<div class='col-md-5'></div>
+    <div class="col-md-2" id="user-login-interface">
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#signUpModal" id="signUpBtn">Sign up here!</button>
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#loginModal" id="logInBtn">Log In</button>
+      <button type="button" class="btn btn-secondary btn-sm btn-block" data-toggle="modal" data-target="#logOutModal" id=logOutBtn>Log Out</button>
+    </div>
+  <div class='col-md-5'></div>
+	`);
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       console.log("a user is signed in");
       $("#signUpBtn").hide();
       $("#logInBtn").hide();
       $("#logOutBtn").show();
-      $("#eventBtn").show();
+			$("#eventBtn").show();
     } else {
       console.log("no user is signed in");
       $("#signUpBtn").show();
       $("#logInBtn").show();
       $("#logOutBtn").hide();
-      $("#eventBtn").hide();
+			$("#eventBtn").hide();
+      $("#instructions")
+        .html(`<p>If you log in you can view your itineraries anytime you revisit</p>
+			<h4>Date Night Planner</h4>`);
     }
   });
-
+  $("#options").html(``);
+  $("#instructions").html(``);
+  $("#find").html(``);
+  $("#choices").html(``);
+	$("#next").html(``);
+	$("#restart").html(`<button type="button" class="btn btn-primary btn-lg" id="again">Try Again?</button>`);
+  document.getElementById("results").style.backgroundColor =
+    "rgba(66, 66, 66, .7)";
   $("#results").html(`
     <h2 >You are going to eat at ${$(this).attr("name")},</h2>
     <h2 >and then going to ${sessionStorage.getItem(
@@ -484,26 +523,21 @@ $(document).on("click", ".newSelect", function() {
 $(document).on("click", "#eventBtn", function() {
   var user = firebase.auth().currentUser;
   if (user) {
-    console.log(user.uid);
     var userRef = user.uid;
-
     database.ref(`users/${userRef}`).on(
       "value",
       function(snapshot) {
         var key = snapshot.key;
-        console.log("key", key);
-
         var snap = snapshot.val();
-        console.log("snap", snap);
-
+        $("#yourEventFrame").html("");
         var userKeys = Object.keys(snap);
-        console.log("userKeys", userKeys);
         userKeys.forEach(function(key) {
-          console.log(snap[key]);
           $("#yourEventFrame").append(`
 				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
 				<h3>${snap[key].date} at ${snap[key].time}</h3>
 				<h3>${snap[key].food}</h3>
+				<div><i class="fas fa-trash" value="${key}"></i></div>
+				<hr>
 				`);
         });
       },
@@ -516,6 +550,28 @@ $(document).on("click", "#eventBtn", function() {
 //clears the modal so it will not append multiple times
 $(document).on("click", "#closeOne", "#closeTwo", function() {
   $("#yourEventFrame").empty();
+});
+
+
+$(document).on("click", ".fa-trash", function(){
+	var user = firebase.auth().currentUser;
+	var userRef = user.uid;
+	var key = $(this).attr("value");
+	database.ref("users/" + user.uid + "/" + key).remove();
+	database.ref(`users/${userRef}`).on("value", function(snapshot){
+		var snap = snapshot.val();
+		var userKeys = Object.keys(snap);
+		$("#yourEventFrame").html(``);
+		userKeys.forEach(function(key) {
+			$("#yourEventFrame").append(`
+				<a href="${snap[key].link}" target="_blank"><h3>${snap[key].event}<h3></a>
+				<h3>${snap[key].date} at ${snap[key].time}</h3>
+				<h3>${snap[key].food}</h3>
+				<i class="fas fa-trash" value="${key}"></i>
+				<hr>
+				`);
+			});
+	});
 });
 
 function mapIt() {
@@ -562,4 +618,9 @@ $(window).resize(function() {
     $("#add-params")
       .removeClass("btn-block", "btn-sm")
       .addClass("btn-lg");
+});
+
+//Refresh the page to try again.
+$(document).on("click", "#again", function(){
+	location.reload(true);
 });
