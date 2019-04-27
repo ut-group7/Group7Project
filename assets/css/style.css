@@ -87,6 +87,8 @@ h1 {
   padding: 15px;
   font-weight: 900;
   color: whitesmoke;
+  margin-top: 25px;
+  margin-bottom: 45px;
 }
 
 img {
@@ -161,6 +163,14 @@ label {
   padding-left: 10px;
 }
 
+#footer {
+  background-color: #202020;
+  color: white;
+  align-content: center;
+  justify-content: center;
+  height: 100px;
+}
+
 @media only screen and (max-width: 600px) {
   #find {
     display: inline-grid;
@@ -215,6 +225,7 @@ label {
   width: 90%;
   height: 400px;
   padding-bottom: 400px;
+  margin-bottom: 45px;
 }
 
 #headmap {
